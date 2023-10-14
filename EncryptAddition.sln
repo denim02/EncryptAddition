@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33516.290
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EncryptAddition.WPF", "EncryptAddition.WPF\EncryptAddition.WPF.csproj", "{C290D184-602F-484C-A0E5-F15B55B9A0FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EncryptAddition.WPF", "EncryptAddition.WPF\EncryptAddition.WPF.csproj", "{C290D184-602F-484C-A0E5-F15B55B9A0FC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EncryptAddtion.Tests", "EncryptAddtion.Tests\EncryptAddtion.Tests.csproj", "{F58729BF-391D-483E-AA08-324A672917D2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EncryptAddition.Crypto", "EncryptAddition.Crypto\EncryptAddition.Crypto.csproj", "{BEF8EE0F-835D-4FDB-807C-D2323F80FC53}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{C290D184-602F-484C-A0E5-F15B55B9A0FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C290D184-602F-484C-A0E5-F15B55B9A0FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C290D184-602F-484C-A0E5-F15B55B9A0FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F58729BF-391D-483E-AA08-324A672917D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F58729BF-391D-483E-AA08-324A672917D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F58729BF-391D-483E-AA08-324A672917D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F58729BF-391D-483E-AA08-324A672917D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEF8EE0F-835D-4FDB-807C-D2323F80FC53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEF8EE0F-835D-4FDB-807C-D2323F80FC53}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEF8EE0F-835D-4FDB-807C-D2323F80FC53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEF8EE0F-835D-4FDB-807C-D2323F80FC53}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
