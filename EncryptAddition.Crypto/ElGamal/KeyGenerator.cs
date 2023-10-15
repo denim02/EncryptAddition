@@ -2,7 +2,7 @@
 
 namespace EncryptAddition.Crypto.ElGamal
 {
-    internal class KeyGenerator : IKeyGenerator<KeyPair>
+    public class KeyGenerator : IKeyGenerator<KeyPair>
     {
         private readonly BigInteger _prime;
         private readonly BigInteger _generator;

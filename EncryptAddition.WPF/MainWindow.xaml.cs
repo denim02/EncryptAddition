@@ -1,4 +1,5 @@
-﻿using EncryptAddition.Crypto.ElGamal;
+﻿using EncryptAddition.Crypto;
+using EncryptAddition.Crypto.ElGamal;
 using EncryptAddition.Crypto.Paillier;
 using System.Linq;
 using System.Numerics;
@@ -15,19 +16,20 @@ namespace EncryptAddition.WPF
         {
             int primeBitLength = 32;
 
-            ElGamalAlgorithm elGamal = new(primeBitLength);
+            ElGamalEncryption elGamal = new(primeBitLength);
 
-            int[] unencryptedNumbers = { 500, 70, 1, 0 };
+            int[] unencryptedNumbers = { 3, 4, 5, 6, 1, 2, 7, 8, 9 };
 
-            ElGamalCipherText[] elGamalCiphers = unencryptedNumbers.Select(x => elGamal.Encrypt(x)).ToArray();
-            ElGamalCipherText elGamalSum = elGamal.Add(elGamalCiphers);
+            CipherText[] elGamalCiphers = unencryptedNumbers.Select(x => elGamal.Encrypt(x)).ToArray();
+            CipherText elGamalSum = elGamal.Add(elGamalCiphers);
             BigInteger decryptedElGamal = elGamal.Decrypt(elGamalSum);
 
-            PaillierAlgorithm paillier = new(primeBitLength);
+            PaillierEncryption paillier = new(1024);
 
-            PaillierCipherText[] paillierCiphers = unencryptedNumbers.Select(x => paillier.Encrypt(x)).ToArray();
-            PaillierCipherText paillierSum = paillier.Add(paillierCiphers);
+            CipherText[] paillierCiphers = unencryptedNumbers.Select(x => paillier.Encrypt(x)).ToArray();
+            CipherText paillierSum = paillier.Add(paillierCiphers);
             BigInteger decryptedPaillier = paillier.Decrypt(paillierSum);
+
 
             InitializeComponent();
         }

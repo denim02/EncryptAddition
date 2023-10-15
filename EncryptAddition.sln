@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EncryptAddition.WPF", "Encr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EncryptAddtion.Tests", "EncryptAddtion.Tests\EncryptAddtion.Tests.csproj", "{F58729BF-391D-483E-AA08-324A672917D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EncryptAddition.Crypto", "EncryptAddition.Crypto\EncryptAddition.Crypto.csproj", "{BEF8EE0F-835D-4FDB-807C-D2323F80FC53}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EncryptAddition.Crypto", "EncryptAddition.Crypto\EncryptAddition.Crypto.csproj", "{BEF8EE0F-835D-4FDB-807C-D2323F80FC53}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EncryptAddition.Analysis", "EncryptAddition.Analysis\EncryptAddition.Analysis.csproj", "{C5DB1A20-EC7F-43AD-AAE5-F30052B04624}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{BEF8EE0F-835D-4FDB-807C-D2323F80FC53}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BEF8EE0F-835D-4FDB-807C-D2323F80FC53}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BEF8EE0F-835D-4FDB-807C-D2323F80FC53}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5DB1A20-EC7F-43AD-AAE5-F30052B04624}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5DB1A20-EC7F-43AD-AAE5-F30052B04624}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5DB1A20-EC7F-43AD-AAE5-F30052B04624}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5DB1A20-EC7F-43AD-AAE5-F30052B04624}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
