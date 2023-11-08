@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using EncryptAddition.Crypto.Utils;
+using System.Numerics;
 
 namespace EncryptAddition.Crypto.Paillier
 {
@@ -17,12 +18,7 @@ namespace EncryptAddition.Crypto.Paillier
 
         public PaillierEncryption(int primeBitLength)
         {
-            BigInteger p = Helpers.GeneratePrime(primeBitLength);
-            BigInteger q = Helpers.GeneratePrime(primeBitLength);
-            while (p == q)
-                q = Helpers.GeneratePrime(primeBitLength);
-
-            KeyGenerator = new KeyGenerator(p, q);
+            KeyGenerator = new KeyGenerator(primeBitLength);
             KeyPair = KeyGenerator.GenerateKeyPair();
             nSquared = BigInteger.Pow(KeyPair.PublicKey.N, 2);
         }
@@ -39,7 +35,7 @@ namespace EncryptAddition.Crypto.Paillier
 
             do
             {
-                randomVal = Helpers.NextBigInteger(1, KeyPair.PublicKey.N - 1);
+                randomVal = Helpers.GetBigInteger(1, KeyPair.PublicKey.N - 1);
             } while (BigInteger.GreatestCommonDivisor(randomVal, KeyPair.PublicKey.N) != BigInteger.One);
 
             return new CipherText(BigInteger.Multiply(BigInteger.ModPow(KeyPair.PublicKey.G, input, nSquared), BigInteger.ModPow(randomVal, KeyPair.PublicKey.N, nSquared)) % (nSquared));

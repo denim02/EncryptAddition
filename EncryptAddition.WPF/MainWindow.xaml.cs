@@ -1,4 +1,5 @@
-﻿using EncryptAddition.Crypto;
+﻿using EncryptAddition.Analysis.Benchmarking;
+using EncryptAddition.Crypto;
 using EncryptAddition.Crypto.ElGamal;
 using EncryptAddition.Crypto.Paillier;
 using System.Linq;
@@ -24,12 +25,15 @@ namespace EncryptAddition.WPF
             CipherText elGamalSum = elGamal.Add(elGamalCiphers);
             BigInteger decryptedElGamal = elGamal.Decrypt(elGamalSum);
 
-            PaillierEncryption paillier = new(1024);
+            PaillierEncryption paillier = new(primeBitLength);
 
             CipherText[] paillierCiphers = unencryptedNumbers.Select(x => paillier.Encrypt(x)).ToArray();
             CipherText paillierSum = paillier.Add(paillierCiphers);
             BigInteger decryptedPaillier = paillier.Decrypt(paillierSum);
 
+            AlgorithmBenchmark paillierBenchmark = new(paillier);
+            (double timeToEncrypt, CipherText cipher) = paillierBenchmark.TimeToEncrypt(12312421);
+            (double timeToDecrypt, _) = paillierBenchmark.TimeToDecrypt(cipher);
 
             InitializeComponent();
         }

@@ -1,3 +1,4 @@
+using EncryptAddition.Crypto.Utils;
 using System.Numerics;
 
 namespace EncryptAddition.Crypto.ElGamal
@@ -15,8 +16,8 @@ namespace EncryptAddition.Crypto.ElGamal
 
         public ElGamalEncryption(int primeBitLength)
         {
-            BigInteger prime = Helpers.GenerateSafePrime(primeBitLength);
-            BigInteger generator = Helpers.FindGeneratorForSafePrime(prime);
+            BigInteger prime = Primality.GenerateSafePrime(primeBitLength);
+            BigInteger generator = CyclicMath.FindGeneratorForSafePrime(prime);
             KeyGenerator = new KeyGenerator(prime, generator);
             KeyPair = KeyGenerator.GenerateKeyPair();
         }
@@ -30,13 +31,13 @@ namespace EncryptAddition.Crypto.ElGamal
         {
             int k = 100;
             BigInteger sharedSecret = BigInteger.ModPow(KeyPair.PublicKey.Generator, k, KeyPair.PublicKey.Prime);
-            BigInteger encryptedMessage = BigInteger.Multiply(
+            BigInteger encryptedMessage = Helpers.ModMul(
                 BigInteger.ModPow(
                     KeyPair.PublicKey.Beta,
                     k,
                     KeyPair.PublicKey.Prime),
                 BigInteger.ModPow(KeyPair.PublicKey.Generator, input, KeyPair.PublicKey.Prime)
-                ) % KeyPair.PublicKey.Prime;
+                , KeyPair.PublicKey.Prime);
 
             return new CipherText(sharedSecret, encryptedMessage);
         }
@@ -48,7 +49,7 @@ namespace EncryptAddition.Crypto.ElGamal
 
             BigInteger val = BigInteger.Multiply(
                 cipher.EncryptedMessage % KeyPair.PublicKey.Prime,
-                Helpers.PrimeModInverse(
+                CyclicMath.PrimeModInverse(
                 BigInteger.ModPow(
                     cipher.SharedSecret.Value,
                     KeyPair.PrivateKey,
@@ -57,7 +58,7 @@ namespace EncryptAddition.Crypto.ElGamal
                 KeyPair.PublicKey.Prime)
                 ) % KeyPair.PublicKey.Prime;
 
-            return Helpers.SolveDiscreteLogarithm(KeyPair.PublicKey.Prime, KeyPair.PublicKey.Generator, val);
+            return CyclicMath.SolveDiscreteLogarithm(KeyPair.PublicKey.Prime, KeyPair.PublicKey.Generator, val);
         }
 
         public CipherText Add(params CipherText[] ciphers)

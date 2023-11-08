@@ -9,14 +9,14 @@
         {
             Assert.ThrowsException<ArgumentException>(() =>
             {
-                Helpers.NextBigInteger(new BigInteger(2000), new BigInteger(1000));
+                CyclicMath.NextBigInteger(new BigInteger(2000), new BigInteger(1000));
             });
         }
 
         [TestMethod]
         public void NextBigInteger_MinBoundEqualToMax()
         {
-            Assert.AreEqual(new BigInteger(1000), Helpers.NextBigInteger(new BigInteger(1000), new BigInteger(1000)));
+            Assert.AreEqual(new BigInteger(1000), CyclicMath.NextBigInteger(new BigInteger(1000), new BigInteger(1000)));
         }
 
         [TestMethod]
@@ -24,7 +24,7 @@
         {
             Assert.ThrowsException<ArgumentException>(() =>
             {
-                Helpers.NextBigInteger(new BigInteger(-1000), new BigInteger(1000));
+                CyclicMath.NextBigInteger(new BigInteger(-1000), new BigInteger(1000));
             });
 
         }

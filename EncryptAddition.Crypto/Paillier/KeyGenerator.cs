@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using EncryptAddition.Crypto.Utils;
+using System.Numerics;
 
 namespace EncryptAddition.Crypto.Paillier
 {
@@ -9,6 +10,17 @@ namespace EncryptAddition.Crypto.Paillier
 
         public KeyGenerator(BigInteger p, BigInteger q)
         {
+            _p = p;
+            _q = q;
+        }
+
+        public KeyGenerator(int primeBitLength)
+        {
+            BigInteger p = Primality.GeneratePrime(primeBitLength);
+            BigInteger q = Primality.GeneratePrime(primeBitLength);
+            while (p == q)
+                q = Primality.GeneratePrime(primeBitLength);
+
             _p = p;
             _q = q;
         }

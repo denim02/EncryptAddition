@@ -1,4 +1,6 @@
-﻿using System.Numerics;
+﻿using EncryptAddition.Crypto.Utils;
+using System.Numerics;
+using System.Security.Cryptography;
 
 namespace EncryptAddition.Crypto.ElGamal
 {
@@ -15,9 +17,15 @@ namespace EncryptAddition.Crypto.ElGamal
 
         public KeyPair GenerateKeyPair()
         {
-            var privateKey = Helpers.NextBigInteger(2, _prime - 1);
+            var rng = RandomNumberGenerator.Create();
+
+            var privateKey = Helpers.GetBigInteger(2, _prime - 1);
             var beta = BigInteger.ModPow(_generator, privateKey, _prime);
+
             PublicKey publicKey = new PublicKey(_prime, _generator, beta);
+
+            rng.Dispose();
+
             return new KeyPair(privateKey, publicKey);
         }
     }

@@ -9,33 +9,33 @@
         public void IsProbablePrime_ZeroAndOne()
         {
             int[] nonPrimes = { 0, 1 };
-            Assert.IsFalse(nonPrimes.Any(candidate => Helpers.IsProbablePrime(candidate)));
+            Assert.IsFalse(nonPrimes.Any(candidate => CyclicMath.IsProbablePrime(candidate)));
         }
 
         [TestMethod]
         public void IsProbablePrime_RangeOfPrimeNegativeValues()
         {
             int[] nonPrimes = { -2, -3, -5, -7, -11, -13, -17, -19, -23, -29 };
-            Assert.IsFalse(nonPrimes.Any(candidate => Helpers.IsProbablePrime(candidate)));
+            Assert.IsFalse(nonPrimes.Any(candidate => CyclicMath.IsProbablePrime(candidate)));
         }
 
         public Boolean TestNegativePrimes(int candidate)
         {
-            return Helpers.IsProbablePrime(candidate);
+            return CyclicMath.IsProbablePrime(candidate);
         }
 
         [TestMethod]
         public void IsProbablePrime_RangeOfCompositeNegativeValues()
         {
             int[] nonPrimes = { -4, -6, -8, -9, -10, -12, -14, -15, -16 };
-            Assert.IsFalse(nonPrimes.Any(candidate => Helpers.IsProbablePrime(candidate)));
+            Assert.IsFalse(nonPrimes.Any(candidate => CyclicMath.IsProbablePrime(candidate)));
         }
 
         [TestMethod]
         public void IsProbablePrime_RangeOfEvenValues()
         {
             int[] nonPrimes = { 4, 6, 8, 10, 12, 14, 16 };
-            Assert.IsFalse(nonPrimes.Any(candidate => Helpers.IsProbablePrime(candidate)));
+            Assert.IsFalse(nonPrimes.Any(candidate => CyclicMath.IsProbablePrime(candidate)));
         }
         #endregion
 
@@ -45,7 +45,7 @@
         {
             int[] primes = { 2, 3, 5, 7, 11, 13, 17, 19, 23, 29 };
 
-            Assert.IsTrue(primes.All(candidate => Helpers.IsProbablePrime(candidate)));
+            Assert.IsTrue(primes.All(candidate => CyclicMath.IsProbablePrime(candidate)));
         }
 
         [TestMethod]
@@ -60,7 +60,7 @@
                 BigInteger.Parse("671998030559713968361666935769")
             };
 
-            Assert.IsTrue(primes.All(candidate => Helpers.IsProbablePrime(candidate)));
+            Assert.IsTrue(primes.All(candidate => CyclicMath.IsProbablePrime(candidate)));
         }
 
         [TestMethod]
@@ -75,7 +75,7 @@
                 BigInteger.Parse("547199442217976879844192511900"),
             };
 
-            Assert.IsFalse(composites.Any(candidate => Helpers.IsProbablePrime(candidate)));
+            Assert.IsFalse(composites.Any(candidate => CyclicMath.IsProbablePrime(candidate)));
         }
         #endregion
 
@@ -90,10 +90,10 @@
             // Populate prime array
             for (int i = 0; i < primes.Length; i++)
             {
-                primes[i] = Helpers.GeneratePrime(bitLength);
+                primes[i] = CyclicMath.GeneratePrime(bitLength);
             }
 
-            Assert.IsTrue(primes.All(candidate => Helpers.IsProbablePrime(candidate)));
+            Assert.IsTrue(primes.All(candidate => CyclicMath.IsProbablePrime(candidate)));
         }
 
         [TestMethod]
@@ -106,10 +106,10 @@
             // Populate prime array
             for (int i = 0; i < primes.Length; i++)
             {
-                primes[i] = Helpers.GeneratePrime(bitLength);
+                primes[i] = CyclicMath.GeneratePrime(bitLength);
             }
 
-            Assert.IsTrue(primes.All(candidate => Helpers.IsProbablePrime(candidate)));
+            Assert.IsTrue(primes.All(candidate => CyclicMath.IsProbablePrime(candidate)));
         }
         #endregion
     }
