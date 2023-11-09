@@ -58,7 +58,7 @@ namespace EncryptAddition.Crypto.ElGamal
                 KeyPair.PublicKey.Prime)
                 ) % KeyPair.PublicKey.Prime;
 
-            return CyclicMath.SolveDiscreteLogarithm(KeyPair.PublicKey.Prime, KeyPair.PublicKey.Generator, val);
+            return CyclicMath.DiscreteLog(KeyPair.PublicKey.Generator, val, KeyPair.PublicKey.Prime);
         }
 
         public CipherText Add(params CipherText[] ciphers)

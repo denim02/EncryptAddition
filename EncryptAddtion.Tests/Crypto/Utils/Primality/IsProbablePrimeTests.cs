@@ -1,6 +1,6 @@
 ﻿using EncryptAddition.Crypto.Utils;
 
-namespace EncryptAddtion.Tests
+namespace EncryptAddtion.Tests.Crypto.Utils
 {
     [TestClass]
     public class IsProbablePrimeTests
