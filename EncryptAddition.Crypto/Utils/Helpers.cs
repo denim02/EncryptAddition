@@ -6,6 +6,60 @@ namespace EncryptAddition.Crypto.Utils
     public static class Helpers
     {
         /// <summary>
+        /// Calculates the ceiling of the integer square root of the provided BigInteger.
+        /// To increase performance with this type, bitshifts are used instead of regular division operations.
+        /// <example>
+        /// For example, if square rooting 3, the result will be 2, since 2 is the smallest integer greater than or equal to the square root of 3.
+        /// </example>
+        /// </summary>
+        /// <returns>The integer square root.</returns>
+        /// <param name="number">A positive BigInteger value.</param>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if a negative value argument is provided.</exception>
+        public static BigInteger SqrtCeil(BigInteger number)
+        {
+            // Validate arguments
+            if (number < 0)
+                throw new ArgumentOutOfRangeException(nameof(number), "The number cannot be negative when determing its square root.");
+
+            // Trivial cases
+            if (number == 0)
+                return 0;
+            if (number == 1)
+                return 1;
+            if (number <= 4)
+                return 2;
+            if (number <= 9)
+                return 3;
+
+            // Establish bounds for binary search.
+            BigInteger middle = 0, squaredMiddle = 0, lowerBound = 0;
+
+            // Take half of the number as the upper bound (equivalent to one right shift),
+            // since the square root of a number cannot be greater than half of the number.
+            BigInteger upperBound = number >> 1;
+
+            // Perform binary search to find the square root of the number.
+            while (lowerBound <= upperBound)
+            {
+                // The middle is the sum of the bounds divided by two (equivalent to one right shift).
+                middle = (upperBound + lowerBound) >> 1;
+
+                // Calculate the square of the middle.
+                squaredMiddle = BigInteger.Pow(middle, 2);
+
+                // Re-evaluate the bounds based on the square of the middle.
+                if (number < squaredMiddle)
+                    upperBound = middle - 1;
+                else if (number > squaredMiddle)
+                    lowerBound = middle + 1;
+                else
+                    break; // The square root was found.
+            }
+
+            return squaredMiddle == number ? middle : lowerBound;
+        }
+
+        /// <summary>
         /// Multiplies two BigInteger values and returns the result modulo the specified modulus.
         /// </summary>
         /// <returns>The modular multiplication of the two values.</returns>

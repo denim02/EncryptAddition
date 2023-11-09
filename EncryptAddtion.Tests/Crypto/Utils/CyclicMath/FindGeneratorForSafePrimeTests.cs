@@ -31,7 +31,7 @@ namespace EncryptAddtion.Tests.Crypto.Utils
 
             BigInteger gen = CyclicMath.FindGeneratorForSafePrime(23);
 
-            Assert.IsTrue(options.Contains(gen));
+            Assert.IsTrue(options.Contains(gen), $"{gen}");
         }
 
         [TestMethod]
@@ -47,7 +47,7 @@ namespace EncryptAddtion.Tests.Crypto.Utils
 
             BigInteger gen = CyclicMath.FindGeneratorForSafePrime(167);
 
-            Assert.IsTrue(options.Contains(gen));
+            Assert.IsTrue(options.Contains(gen), $"{gen}");
         }
     }
 }
