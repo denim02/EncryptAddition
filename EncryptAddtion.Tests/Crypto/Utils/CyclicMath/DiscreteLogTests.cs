@@ -70,6 +70,16 @@ namespace EncryptAddtion.Tests.Crypto.Utils
 
             Assert.AreEqual(CyclicMath.DiscreteLog(generator, power, modulus - 1), new BigInteger(8));
         }
+
+        [TestMethod]
+        public void DiscreteLog_16BitSafePrimeModulusWithLargeExponent()
+        {
+            BigInteger modulus = Primality.GenerateSafePrime(16);
+            BigInteger generator = CyclicMath.FindGeneratorForSafePrime(modulus);
+            BigInteger power = BigInteger.ModPow(generator, modulus - 4, modulus);
+
+            Assert.AreEqual(CyclicMath.DiscreteLog(generator, power, modulus - 1), modulus - 4);
+        }
         #endregion
     }
 }

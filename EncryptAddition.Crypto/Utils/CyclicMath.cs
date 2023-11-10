@@ -18,8 +18,8 @@ namespace EncryptAddition.Crypto.Utils
             if (safePrime < 5)
                 throw new ArgumentOutOfRangeException(nameof(safePrime), "A safe prime cannot be less than 5.");
 
-            // Find the Sophie Germain prime from the safe-prime
-            BigInteger sophieGermainPrime = (safePrime - 1) / 2;
+            // Find the Sophie Germain prime from the safe-prime ((safePrime - 1) / 2).
+            BigInteger sophieGermainPrime = (safePrime - 1) >> 1;
 
             while (true)
             {
@@ -29,7 +29,6 @@ namespace EncryptAddition.Crypto.Utils
                 if (!((BigInteger.ModPow(g, 2, safePrime) == 1) || BigInteger.ModPow(g, sophieGermainPrime, safePrime) == 1))
                     return g;
             }
-
         }
 
         /// <summary>
