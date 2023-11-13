@@ -1,52 +1,25 @@
-﻿using EncryptAddition.Crypto;
-using System.Diagnostics;
-using System.Numerics;
+﻿using System.Diagnostics;
 
 namespace EncryptAddition.Analysis.Benchmarking
 {
-    public class AlgorithmBenchmark
+    /// <summary>
+    /// Contains overloaded Profile method for calculating execution time of functions.
+    /// </summary>
+    public static class Profiling
     {
-        private IEncryptionStrategy _asymmetricAlgorithm;
-
-        public AlgorithmBenchmark(IEncryptionStrategy asymmetricAlgorithm)
-        {
-            _asymmetricAlgorithm = asymmetricAlgorithm;
-        }
-
-        public void SetEncryptionStrategy(IEncryptionStrategy asymmetricAlgorithm)
-        {
-            _asymmetricAlgorithm = asymmetricAlgorithm;
-        }
-
-        public (double ExecutionTime, CipherText Cipher) TimeToEncrypt(BigInteger input)
-        {
-            double executionTime = Profile(() => _asymmetricAlgorithm.Encrypt(input), out CipherText cipher);
-            return (executionTime, cipher);
-        }
-
-        public (double ExecutionTime, BigInteger Result) TimeToDecrypt(CipherText input)
-        {
-            double executionTime = Profile(() => _asymmetricAlgorithm.Decrypt(input), out BigInteger result);
-            return (executionTime, result);
-        }
-
-        public (double ExecutionTime, CipherText Result) TimeToAdd(params CipherText[] ciphers)
-        {
-            double executionTime = Profile(() => _asymmetricAlgorithm.Add(ciphers), out CipherText result);
-            return (executionTime, result);
-        }
-
         /// <summary>
-        /// Accurately measures execution time for the provided function.
+        /// Accurately measures execution time for the provided function and stores any return 
+        /// value from the function.
         /// If the number of iterations is specified and it is greater that 1,
         /// the function will be called multiple times and the average execution time will be returned.
         /// Due to the function being called multiple times, care should be taken to ensure that the function
         /// does not have any side effects.
         /// </summary>
+        /// <returns>The average execution time of the function in milliseconds.</returns>
         /// <param name="action">Reference to the function that is to be benchmarked</param>
         /// <param name="returnValue">Reference to a variable which will be used to store the result of the callback</param>
         /// <param name="iterations">Number of times to execute the function</param>
-        /// <returns></returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if the number of iterations is negative.</exception>
         public static double Profile<T>(Func<T> action, out T returnValue, int iterations = 1)
         {
             if (iterations < 1)
@@ -69,29 +42,40 @@ namespace EncryptAddition.Analysis.Benchmarking
             GC.Collect();
 
             // Start the stopwatch
-            watch.Start();
-            for (int i = 0; i < iterations; i++)
+            if (iterations == 1)
             {
+                watch.Start();
                 action();
+                watch.Stop();
+                return watch.Elapsed.TotalMilliseconds;
             }
-            watch.Stop();
+            else
+            {
+                watch.Start();
+                for (int i = 0; i < iterations; i++)
+                {
+                    action();
+                }
+                watch.Stop();
 
-            // Calculate mean running time
-            double executionTime = watch.Elapsed.TotalMilliseconds / iterations;
+                // Calculate mean running time
+                double executionTime = watch.Elapsed.TotalMilliseconds / iterations;
 
-            return executionTime;
+                return executionTime;
+            }
         }
 
         /// <summary>
-        /// Accurately measures execution time for the provided function.
+        /// Accurately measures execution time for the provided function and discards return values.
         /// If the number of iterations is specified and it is greater that 1,
         /// the function will be called multiple times and the average execution time will be returned.
         /// Due to the function being called multiple times, care should be taken to ensure that the function
         /// does not have any side effects.
         /// </summary>
+        /// <returns>The average execution time of the function in milliseconds.</returns>
         /// <param name="action">Reference to the function that is to be benchmarked</param>
         /// <param name="iterations">Number of times to execute the function</param>
-        /// <returns></returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if the number of iterations is negative.</exception>
         public static double Profile(Action action, int iterations = 1)
         {
             if (iterations < 1)
@@ -114,17 +98,27 @@ namespace EncryptAddition.Analysis.Benchmarking
             GC.Collect();
 
             // Start the stopwatch
-            watch.Start();
-            for (int i = 0; i < iterations; i++)
+            if (iterations == 1)
             {
+                watch.Start();
                 action();
+                watch.Stop();
+                return watch.Elapsed.TotalMilliseconds;
             }
-            watch.Stop();
+            else
+            {
+                watch.Start();
+                for (int i = 0; i < iterations; i++)
+                {
+                    action();
+                }
+                watch.Stop();
 
-            // Calculate mean running time
-            double executionTime = watch.Elapsed.TotalMilliseconds / iterations;
+                // Calculate mean running time
+                double executionTime = watch.Elapsed.TotalMilliseconds / iterations;
 
-            return executionTime;
+                return executionTime;
+            }
         }
     }
 }

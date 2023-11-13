@@ -10,11 +10,15 @@ namespace EncryptAddition.Crypto
     /// </summary>
     public interface IEncryptionStrategy
     {
+        public BigInteger MaxPlaintextSize { get; }
+
         CipherText Encrypt(BigInteger input);
 
         BigInteger Decrypt(CipherText input);
 
         CipherText Add(params CipherText[] ciphers);
+
+        void SetPrimeBitLength(int primeBitLength);
 
         void RegenerateKeys();
 
