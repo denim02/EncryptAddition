@@ -1,0 +1,24 @@
+﻿<Window x:Class="EncryptAddition.WPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:EncryptAddition.WPF.Views"
+        WindowStartupLocation="CenterScreen"
+        Title="EncryptAddition" Height="450" Width="800">
+
+    <Grid>
+        <TabControl>
+            <!-- First Tab: Benchmark Tab -->
+            <TabItem Header="Benchmark">
+                <local:BenchmarkTabView />
+            </TabItem>
+
+            <!-- Second Tab: [Assumed Name and Content] -->
+            <TabItem Header="Second Tab" Margin="-2,0,-2,0">
+                <Grid>
+                    <!-- Content for the Second Tab -->
+                    <!-- This can be structured similarly to the first tab or customized as per your requirement -->
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>
