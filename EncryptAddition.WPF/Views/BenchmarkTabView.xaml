@@ -3,18 +3,18 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:EncryptAddition.WPF.Views"
+             xmlns:controls="clr-namespace:EncryptAddition.WPF.Controls"
              xmlns:converters="clr-namespace:EncryptAddition.WPF.Converters"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-
+             d:DesignHeight="450" d:DesignWidth="800">
+    
     <UserControl.Resources>
         <converters:AlgorithmToBenchmarkChoiceConverter x:Key="AlgorithmToBenchmarkChoiceConverter"/>
         <converters:StringToBigIntegerArrayConverter x:Key="StringToBigIntegerArrayConverter"/>
         <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
         <converters:ResultsTupleToRecordConverter x:Key="ResultsTupleToRecordConverter"/>
     </UserControl.Resources>
-    
+
     <Grid>
         <!-- Sidebar for Inputs -->
         <Grid.ColumnDefinitions>
@@ -43,16 +43,11 @@
                 <TextBlock Text="Results will be displayed here" Margin="5"/>
 
                 <TextBlock Text="{Binding BenchmarkResults, Converter={StaticResource ResultsTupleToRecordConverter}}" Visibility="{Binding BenchmarkResults, Converter={StaticResource NullToVisibilityConverter}}"/>
-                <TextBlock Text="{Binding BenchmarkResults, Converter={StaticResource ResultsTupleToRecordConverter}, StringFormat='Bit Length: {0}'}" Visibility="{Binding BenchmarkResults, Converter={StaticResource NullToVisibilityConverter}}"/>
-                <TextBlock Text="{Binding BenchmarkResults, Converter={StaticResource ResultsTupleToRecordConverter}, StringFormat='Key Generation Time: {0}'}" Visibility="{Binding BenchmarkResults, Converter={StaticResource NullToVisibilityConverter}}"/>
-                <TextBlock Text="{Binding BenchmarkResults.Result.EncryptionTime, Converter={StaticResource NullToVisibilityConverter}, StringFormat='Encryption Time: {0}'}" Visibility="{Binding BenchmarkResults, Converter={StaticResource NullToVisibilityConverter}}"/>
-                <TextBlock Text="{Binding BenchmarkResults.Result.DecryptionTime, Converter={StaticResource NullToVisibilityConverter}, StringFormat='Decryption Time: {0}'}" Visibility="{Binding BenchmarkResults, Converter={StaticResource NullToVisibilityConverter}}"/>
-
-                <!-- Only display AdditionTime if it has a value -->
-                <TextBlock Text="{Binding BenchmarkResults.Result.AdditionTime, Converter={StaticResource NullToVisibilityConverter}, StringFormat='Addition Time: {0}'}" Visibility="{Binding BenchmarkResults.Result.AdditionTime, Converter={StaticResource NullToVisibilityConverter}}"/>
 
                 <!-- Placeholder for Charts -->
                 <TextBlock Text="Charts will be displayed here" Margin="5"/>
+
+                <controls:BenchmarkChart ChartData="{Binding BenchmarkResults, Converter={StaticResource ResultsTupleToRecordConverter}}" />
             </StackPanel>
         </ScrollViewer>
     </Grid>

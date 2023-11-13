@@ -20,10 +20,10 @@ namespace EncryptAddition.WPF.Converters
                     case BenchmarkChoice.COMPARISON:
                         return "Both";
                     default:
-                        return null;
+                        return "Paillier";
                 }
             }
-            return null;
+            return "Paillier";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -39,10 +39,10 @@ namespace EncryptAddition.WPF.Converters
                     case "Both":
                         return BenchmarkChoice.COMPARISON;
                     default:
-                        return null;
+                        return "Paillier";
                 }
             }
-            return null;
+            return "Paillier";
         }
     }
 }

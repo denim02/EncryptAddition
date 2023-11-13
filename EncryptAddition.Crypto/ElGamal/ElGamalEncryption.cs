@@ -43,7 +43,7 @@ namespace EncryptAddition.Crypto.ElGamal
         public ElGamalEncryption(KeyPair keyPair)
         {
             ValidateAndSetKeyPair(keyPair);
-            SetPrimeBitLength((int)KeyPair.PublicKey.Prime.GetBitLength());
+            SetPrimeBitLength((int)KeyPair!.PublicKey.Prime.GetBitLength());
         }
 
         /// <summary>
@@ -191,7 +191,7 @@ namespace EncryptAddition.Crypto.ElGamal
             if (ciphers.Length == 1)
                 return ciphers[0];
 
-            BigInteger sharedSecret = ciphers.Select(cipher => cipher.SharedSecret.Value).Aggregate((secret1, secret2) => Helpers.ModMul(secret1, secret2, KeyPair.PublicKey.Prime));
+            BigInteger sharedSecret = ciphers.Select(cipher => cipher.SharedSecret!.Value).Aggregate((secret1, secret2) => Helpers.ModMul(secret1, secret2, KeyPair.PublicKey.Prime));
 
             BigInteger encryptedMessage = ciphers.Select(cipher => cipher.EncryptedMessage).Aggregate((encryptedMsg1, encryptedMsg2) => Helpers.ModMul(encryptedMsg1, encryptedMsg2, KeyPair.PublicKey.Prime));
 
