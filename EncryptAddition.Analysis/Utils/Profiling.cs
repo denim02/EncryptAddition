@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace EncryptAddition.Analysis.Benchmarking
+namespace EncryptAddition.Analysis.Utils
 {
     /// <summary>
     /// Contains overloaded Profile method for calculating execution time of functions.

@@ -11,8 +11,4 @@
     <ProjectReference Include="..\EncryptAddition.Crypto\EncryptAddition.Crypto.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Charting\" />
-  </ItemGroup>
-
 </Project>

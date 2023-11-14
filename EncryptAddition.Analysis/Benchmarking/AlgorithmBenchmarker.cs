@@ -1,4 +1,5 @@
-﻿using EncryptAddition.Crypto;
+﻿using EncryptAddition.Analysis.Utils;
+using EncryptAddition.Crypto;
 using System.Numerics;
 
 namespace EncryptAddition.Analysis.Benchmarking

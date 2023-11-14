@@ -1,4 +1,4 @@
-﻿using EncryptAddition.Crypto;
+﻿using EncryptAddition.Analysis.ResultTypes;
 using System.Numerics;
 
 namespace EncryptAddition.Analysis.Benchmarking
@@ -39,17 +39,6 @@ namespace EncryptAddition.Analysis.Benchmarking
             var elGamalResults = _elGamalSuite.RunBenchmarks(values);
 
             return (paillierResults, elGamalResults);
-        }
-
-        public (BenchmarkResult PaillierResult, CipherText[] PaillierSteps, BenchmarkResult ElGamalResult, CipherText[] ElGamalSteps) RunBenchmarksWithSteps(params BigInteger[] values)
-        {
-            // Run benchmarks for Paillier
-            var (PaillierResult, PaillierIntermediarySteps) = _paillierSuite.RunBenchmarksWithSteps(values);
-
-            // Run benchmarks for ElGamal
-            var (ElGamalResult, ElGamalIntermediarySteps) = _elGamalSuite.RunBenchmarksWithSteps(values);
-
-            return (PaillierResult, PaillierIntermediarySteps, ElGamalResult, ElGamalIntermediarySteps);
         }
     }
 }

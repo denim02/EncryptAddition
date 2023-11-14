@@ -1,4 +1,5 @@
-﻿using EncryptAddition.Crypto;
+﻿using EncryptAddition.Analysis.ResultTypes;
+using EncryptAddition.Crypto;
 using EncryptAddition.Crypto.ElGamal;
 using EncryptAddition.Crypto.Paillier;
 using System.Numerics;
@@ -40,31 +41,19 @@ namespace EncryptAddition.Analysis.Benchmarking
             if (values.Length == 0)
                 throw new InvalidOperationException("Cannot run benchmarks without any input values.");
 
-            (BenchmarkResult result, _) = (values.Length == 1) ? RunBenchmarksWithoutAddition(values[0]) : RunBenchmarksWithAddition(values);
-
-            return result;
+            return values.Length == 1 ? RunBenchmarksWithoutAddition(values[0]) : RunBenchmarksWithAddition(values);
         }
 
-        public (BenchmarkResult Result, CipherText[] IntermediarySteps) RunBenchmarksWithSteps(params BigInteger[] values)
-        {
-            if (values.Length == 0)
-                throw new InvalidOperationException("Cannot run benchmarks without any input values.");
-
-            (BenchmarkResult result, CipherText[] ciphers) = (values.Length == 1) ? RunBenchmarksWithoutAddition(values[0]) : RunBenchmarksWithAddition(values);
-
-            return (result, ciphers);
-        }
-
-        private (BenchmarkResult Result, CipherText[] IntermediaryStep) RunBenchmarksWithoutAddition(BigInteger value)
+        private BenchmarkResult RunBenchmarksWithoutAddition(BigInteger value)
         {
             double keyGenTime = _algorithmBenchmarker.TimeToGenerateKeys();
             (double encryptTime, CipherText cipher) = _algorithmBenchmarker.TimeToEncrypt(value);
             (double decryptTime, _) = _algorithmBenchmarker.TimeToDecrypt(cipher);
 
-            return (new BenchmarkResult(EncryptionType.ToString(), BitLength, keyGenTime, encryptTime, decryptTime), new CipherText[] { cipher });
+            return new BenchmarkResult(EncryptionType.ToString(), BitLength, keyGenTime, encryptTime, decryptTime, new CipherText[] { cipher });
         }
 
-        private (BenchmarkResult Result, CipherText[] IntermediarySteps) RunBenchmarksWithAddition(BigInteger[] values)
+        private BenchmarkResult RunBenchmarksWithAddition(BigInteger[] values)
         {
             // Determine if the sum is larger than the max value for the bit length.
             BigInteger sum = values.Aggregate((a, b) => a + b);
@@ -78,7 +67,7 @@ namespace EncryptAddition.Analysis.Benchmarking
             (double addTime, CipherText cipher) = _algorithmBenchmarker.TimeToAdd(ciphers);
             (double decryptTime, _) = _algorithmBenchmarker.TimeToDecrypt(cipher);
 
-            return (new BenchmarkResult(EncryptionType.ToString(), BitLength, keyGenTime, encryptTime, decryptTime, addTime), ciphers.Append(cipher).ToArray());
+            return new BenchmarkResult(EncryptionType.ToString(), BitLength, keyGenTime, encryptTime, decryptTime, ciphers.Append(cipher).ToArray(), addTime);
         }
     }
 }
