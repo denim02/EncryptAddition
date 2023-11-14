@@ -18,7 +18,7 @@ namespace EncryptAddition.WPF.Converters
                     case BenchmarkChoice.ELGAMAL:
                         return "ElGamal";
                     case BenchmarkChoice.COMPARISON:
-                        return "Both";
+                        return "Comparison";
                     default:
                         return "Paillier";
                 }
@@ -36,7 +36,7 @@ namespace EncryptAddition.WPF.Converters
                         return BenchmarkChoice.PAILLIER;
                     case "ElGamal":
                         return BenchmarkChoice.ELGAMAL;
-                    case "Both":
+                    case "Comparison":
                         return BenchmarkChoice.COMPARISON;
                     default:
                         return "Paillier";

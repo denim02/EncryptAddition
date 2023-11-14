@@ -1,4 +1,5 @@
-﻿using EncryptAddition.WPF.Services;
+﻿using EncryptAddition.WPF.DataTypes;
+using EncryptAddition.WPF.ServiceAdapters;
 using EncryptAddition.WPF.ViewModels;
 using System;
 using System.Threading.Tasks;
@@ -17,14 +18,17 @@ namespace EncryptAddition.WPF.Commands
         public override async Task ExecuteAsync(object parameter)
         {
             _benchmarkTabViewModel.IsPreparingBenchmark = true;
-            var _benchmarkService = new BenchmarkService(_benchmarkTabViewModel.StrategyChoice, _benchmarkTabViewModel.BitLength);
 
             try
             {
-                await Task.Run(() => _benchmarkService.PrepareBenchmark());
+                IAsyncAnalysisAdapter analysisAdapter = (_benchmarkTabViewModel.BenchmarkChoice == BenchmarkChoice.COMPARISON) ? new AsyncComparisonServiceAdapter(_benchmarkTabViewModel.BitLength) : new AsyncSingleBenchmarkServiceAdapter(_benchmarkTabViewModel.BenchmarkChoice, _benchmarkTabViewModel.BitLength);
+                await analysisAdapter.PrepareService();
+
                 _benchmarkTabViewModel.IsPreparingBenchmark = false;
                 _benchmarkTabViewModel.IsBenchmarking = true;
-                var results = await Task.Run(() => _benchmarkService.RunBenchmarks(_benchmarkTabViewModel.InputValues));
+
+                var results = await analysisAdapter.RunAnalysis(_benchmarkTabViewModel.InputValues);
+
                 _benchmarkTabViewModel.IsBenchmarking = false;
                 _benchmarkTabViewModel.BenchmarkResults = results;
             }

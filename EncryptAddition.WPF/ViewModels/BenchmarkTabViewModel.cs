@@ -1,7 +1,7 @@
-﻿using EncryptAddition.Analysis.Benchmarking;
-using EncryptAddition.Crypto;
+﻿using EncryptAddition.Analysis.ResultTypes;
 using EncryptAddition.WPF.Commands;
 using EncryptAddition.WPF.DataTypes;
+using System;
 using System.Numerics;
 using System.Windows.Input;
 
@@ -9,7 +9,18 @@ namespace EncryptAddition.WPF.ViewModels
 {
     public class BenchmarkTabViewModel : BaseViewModel
     {
-        public string[] StrategyList { get; } = new string[] { "ElGamal", "Paillier", "Both" };
+        public string[] StrategyList { get; } = new string[] { "ElGamal", "Paillier", "Comparison" };
+
+        private BenchmarkChoice _benchmarkChoice = BenchmarkChoice.PAILLIER;
+        public BenchmarkChoice BenchmarkChoice
+        {
+            get => _benchmarkChoice;
+            set
+            {
+                _benchmarkChoice = value;
+                OnPropertyChanged(nameof(BenchmarkChoice));
+            }
+        }
 
         private int _bitLength;
         public int BitLength
@@ -19,17 +30,6 @@ namespace EncryptAddition.WPF.ViewModels
             {
                 _bitLength = value;
                 OnPropertyChanged(nameof(BitLength));
-            }
-        }
-
-        private BenchmarkChoice _benchmarkChoice = BenchmarkChoice.PAILLIER;
-        public BenchmarkChoice StrategyChoice
-        {
-            get => _benchmarkChoice;
-            set
-            {
-                _benchmarkChoice = value;
-                OnPropertyChanged(nameof(StrategyChoice));
             }
         }
 
@@ -44,8 +44,9 @@ namespace EncryptAddition.WPF.ViewModels
             }
         }
 
-        private (BenchmarkResult Result, CipherText[] IntermediarySteps)? _benchmarkResults = null;
-        public (BenchmarkResult Result, CipherText[] IntermediarySteps)? BenchmarkResults
+        // Can hold two in case of comparison
+        private Tuple<BenchmarkResult, BenchmarkResult?>? _benchmarkResults = null;
+        public Tuple<BenchmarkResult, BenchmarkResult?>? BenchmarkResults
         {
             get => _benchmarkResults;
             set
@@ -76,6 +77,8 @@ namespace EncryptAddition.WPF.ViewModels
                 OnPropertyChanged(nameof(IsBenchmarking));
             }
         }
+
+        public bool IsBusy => IsBenchmarking || IsPreparingBenchmark;
 
         public ICommand ExecuteBenchmark { get; }
 

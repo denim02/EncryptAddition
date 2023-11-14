@@ -1,34 +1,38 @@
 ﻿using EncryptAddition.Analysis.Benchmarking;
-using EncryptAddition.Crypto;
+using EncryptAddition.Analysis.ResultTypes;
 using EncryptAddition.WPF.DataTypes;
 using System;
 using System.Numerics;
 
 namespace EncryptAddition.WPF.Services
 {
-    public class BenchmarkService
+    public class SingleBenchmarkService : IAnalysisService<BenchmarkResult>
     {
-        private BenchmarkSuite _benchmarkSuite;
-        private EncryptionStrategy _encryptionStrategy;
-        private int _bitLength;
+        private BenchmarkSuite? _benchmarkSuite;
 
-        public BenchmarkService(BenchmarkChoice choice, int bitLength)
+        private readonly EncryptionStrategy _encryptionStrategy;
+        private readonly int _bitLength;
+
+        public SingleBenchmarkService(BenchmarkChoice choice, int bitLength)
         {
             _encryptionStrategy = BenchmarkChoiceToEncryptionStrategyConvert(choice);
             _bitLength = bitLength;
         }
 
-        public void PrepareBenchmark()
+        public void PrepareService()
         {
             _benchmarkSuite = new BenchmarkSuite(_encryptionStrategy, _bitLength);
         }
 
-        public (BenchmarkResult Result, CipherText[] IntermediarySteps) RunBenchmarks(params BigInteger[] inputs)
+        public BenchmarkResult RunAnalysis(BigInteger[] inputs)
         {
-            return _benchmarkSuite.RunBenchmarksWithSteps(inputs);
+            if (_benchmarkSuite == null)
+                throw new InvalidOperationException("BenchmarkSuite not initialized.");
+
+            return _benchmarkSuite.RunBenchmarks(inputs);
         }
 
-        private EncryptionStrategy BenchmarkChoiceToEncryptionStrategyConvert(BenchmarkChoice choice)
+        private static EncryptionStrategy BenchmarkChoiceToEncryptionStrategyConvert(BenchmarkChoice choice)
         {
             switch (choice)
             {

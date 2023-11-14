@@ -1,6 +1,7 @@
-﻿using EncryptAddition.Analysis.Benchmarking;
+﻿using EncryptAddition.Analysis.ResultTypes;
 using LiveCharts;
 using LiveCharts.Wpf;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -14,8 +15,8 @@ namespace EncryptAddition.WPF.Controls
         }
 
         public static readonly DependencyProperty ChartDataProperty =
-        DependencyProperty.Register("ChartData", typeof(BenchmarkResult), typeof(BenchmarkChartControl),
-            new PropertyMetadata(default(BenchmarkResult), OnChartDataChanged));
+        DependencyProperty.Register("ChartData", typeof(Tuple<BenchmarkResult, BenchmarkResult?>), typeof(BenchmarkChartControl),
+            new PropertyMetadata(null, OnChartDataChanged));
 
         private static void OnChartDataChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -23,26 +24,68 @@ namespace EncryptAddition.WPF.Controls
             control.UpdateChart();
         }
 
-        public BenchmarkResult ChartData
+        public Tuple<BenchmarkResult, BenchmarkResult?> ChartData
         {
-            get { return (BenchmarkResult)GetValue(ChartDataProperty); }
+            get { return (Tuple<BenchmarkResult, BenchmarkResult?>)GetValue(ChartDataProperty); }
             set { SetValue(ChartDataProperty, value); }
         }
 
         private void UpdateChart()
         {
             var chartSeries = new SeriesCollection();
+            (BenchmarkResult firstResult, BenchmarkResult? secondResult) = ChartData;
 
-            var values = (ChartData.AdditionTime.HasValue) ? new ChartValues<double> { ChartData.KeyGenerationTime, ChartData.EncryptionTime, ChartData.DecryptionTime, ChartData.AdditionTime.Value } : new ChartValues<double> { ChartData.KeyGenerationTime, ChartData.EncryptionTime, ChartData.DecryptionTime };
+            var firstBenchmarks = (firstResult.AdditionTime.HasValue) ?
+                new ChartValues<double> {
+                    firstResult.KeyGenerationTime,
+                    firstResult.EncryptionTime,
+                    firstResult.DecryptionTime,
+                    firstResult.AdditionTime.Value
+                } :
+                new ChartValues<double> {
+                    firstResult.KeyGenerationTime,
+                    firstResult.EncryptionTime,
+                    firstResult.DecryptionTime
+                };
 
-            var labels = (ChartData.AdditionTime.HasValue) ? new string[] { "Key Generation Time", "Encryption Time", "Decryption Time", "Addition Time" } :
-                new string[] { "Key Generation Time", "Encryption Time", "Decryption Time" };
+            var title = firstResult.AlgorithmName == "PAILLIER" ? "Paillier Benchmarks" : "ElGamal Benchmarks";
 
             chartSeries.Add(new ColumnSeries
             {
-                Values = values
+                Title = title,
+                Values = firstBenchmarks
             });
 
+            if (secondResult.HasValue)
+            {
+                var secondBenchmarks = (secondResult.Value.AdditionTime.HasValue) ?
+                    new ChartValues<double> {
+                        secondResult.Value.KeyGenerationTime,
+                        secondResult.Value.EncryptionTime,
+                        secondResult.Value.DecryptionTime,
+                        secondResult.Value.AdditionTime.Value
+                    } :
+                    new ChartValues<double> {
+                        secondResult.Value.KeyGenerationTime,
+                        secondResult.Value.EncryptionTime,
+                        secondResult.Value.DecryptionTime
+                    };
+
+                // If there's two, the second is always ElGamal as per function definitions in service classes
+                chartSeries.Add(new ColumnSeries
+                {
+                    Title = "ElGamal Benchmarks",
+                    Values = secondBenchmarks
+                });
+            }
+
+            var labels = (firstResult.AdditionTime.HasValue) ?
+                new string[] { "Key Generation Time", "Encryption Time", "Decryption Time", "Addition Time" } :
+                new string[] { "Key Generation Time", "Encryption Time", "Decryption Time" };
+
+            Func<double, string> labelFormatter = value => value.ToString("G5");
+
+            this.CartesianChart.AxisX[0].LabelFormatter = labelFormatter;
             this.CartesianChart.Series = chartSeries;
             this.XAxis.Labels = labels;
         }
