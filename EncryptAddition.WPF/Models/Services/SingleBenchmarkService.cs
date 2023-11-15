@@ -4,7 +4,7 @@ using EncryptAddition.WPF.DataTypes;
 using System;
 using System.Numerics;
 
-namespace EncryptAddition.WPF.Services
+namespace EncryptAddition.WPF.Models.Services
 {
     public class SingleBenchmarkService : IAnalysisService<BenchmarkResult>
     {

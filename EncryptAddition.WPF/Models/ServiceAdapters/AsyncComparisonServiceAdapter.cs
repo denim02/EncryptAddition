@@ -1,15 +1,15 @@
 ﻿using EncryptAddition.Analysis.ResultTypes;
-using EncryptAddition.WPF.Services;
+using EncryptAddition.WPF.Models.Services;
 using System;
 using System.Numerics;
 using System.Threading.Tasks;
 
-namespace EncryptAddition.WPF.ServiceAdapters
+namespace EncryptAddition.WPF.Models.ServiceAdapters
 {
     public class AsyncComparisonServiceAdapter : IAsyncAnalysisAdapter
     {
         private ComparisonService _comparisonService;
-        private bool _isServiceReady = false;
+        public bool IsReady { get; private set; } = false;
 
         public AsyncComparisonServiceAdapter(int bitLength)
         {
@@ -18,13 +18,13 @@ namespace EncryptAddition.WPF.ServiceAdapters
 
         public Task PrepareService()
         {
-            _isServiceReady = true;
+            IsReady = true;
             return Task.Run(() => _comparisonService.PrepareService());
         }
 
         public async Task<Tuple<BenchmarkResult, BenchmarkResult?>> RunAnalysis(BigInteger[] inputs)
         {
-            if (!_isServiceReady)
+            if (!IsReady)
                 throw new InvalidOperationException("The service was not prepared properly to handle this operation.");
 
             var results = await Task.Run(() => _comparisonService.RunAnalysis(inputs));

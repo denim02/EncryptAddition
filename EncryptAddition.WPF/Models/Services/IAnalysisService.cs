@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace EncryptAddition.WPF.Services
+namespace EncryptAddition.WPF.Models.Services
 {
     public interface IAnalysisService<T>
     {
