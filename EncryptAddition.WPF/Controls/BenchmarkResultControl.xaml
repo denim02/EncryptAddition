@@ -1,0 +1,130 @@
+﻿<UserControl x:Class="EncryptAddition.WPF.Controls.BenchmarkResultControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:EncryptAddition.WPF.Controls"
+             xmlns:converters="clr-namespace:EncryptAddition.WPF.Converters"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <converters:NullToCollapsedVisibilityConverter x:Key="NullToCollapsedVisibilityConverter" />
+        <converters:NotNullToCollapsedVisibilityConverter x:Key="NotNullToCollapsedVisibilityConverter" />
+        <converters:CipherArrayWithoutLastValueConverter x:Key="CipherArrayWithoutLastValueConverter" />
+        <converters:MillisecondTimeToStringConverter x:Key="MillisecondTimeToStringConverter" />
+        <converters:BigIntToScientificNotationConverter x:Key="BigIntToScientificNotationConverter" />
+        <converters:BigIntToHexadecConverter x:Key="BigIntToHexadecConverter" />
+    </UserControl.Resources>
+    
+    <Grid Margin="5">
+        <Grid.Resources>
+            <Style TargetType="{x:Type TextBlock}">
+                <Setter Property="Margin" Value="10,5"/>
+            </Style>
+        </Grid.Resources>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="1" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="1" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="1" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="1" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="1" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="1" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="1" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="1" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Algorithm Name -->
+        <TextBlock FontWeight="Bold" Grid.Row="0"  Grid.Column="0" Text="{Binding AlgorithmName}"/>
+
+        <Border Grid.ColumnSpan="2" Grid.Row="1" Background="Gray" />
+
+        <!-- Bit Length -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal">
+            <TextBlock Grid.Column="0" Text="Bit Length:" />
+            <TextBlock Grid.Column="1" Text="{Binding BitLength}" />
+        </StackPanel>
+
+        <Border Grid.ColumnSpan="2" Grid.Row="3" Background="Gray" />
+
+        <!-- Maximum Plaintext Size -->
+        <StackPanel Grid.Row="4" Orientation="Horizontal">
+            <TextBlock Grid.Column="0" Text="Maximum Plaintext Size:" />
+            <TextBlock Grid.Column="1" Text="{Binding MaxPlaintextSize, Converter={StaticResource BigIntToScientificNotationConverter}}" />
+        </StackPanel>
+
+        <Border Grid.ColumnSpan="2" Grid.Row="5" Background="Gray" />
+
+        <!-- Key Generation Time -->
+        <StackPanel Grid.Row="6" Orientation="Horizontal">
+            <TextBlock Grid.Column="0" Text="Key Generation Time:" />
+            <TextBlock Grid.Column="1" Text="{Binding KeyGenerationTime, Converter={StaticResource MillisecondTimeToStringConverter}}" />
+        </StackPanel>
+
+        <Border Grid.ColumnSpan="2" Grid.Row="7" Background="Gray" />
+
+        <!-- Encryption Time -->
+        <StackPanel Grid.Row="8" Orientation="Horizontal">
+            <TextBlock Grid.Column="0" Text="Encryption Time:" />
+            <TextBlock Grid.Column="1" Text="{Binding EncryptionTime, Converter={StaticResource MillisecondTimeToStringConverter}}" />
+        </StackPanel>
+
+        <Border Grid.ColumnSpan="2" Grid.Row="9" Background="Gray" />
+
+        <!-- Decryption Time -->
+        <StackPanel Grid.Row="10" Orientation="Horizontal">
+            <TextBlock Grid.Column="0" Text="Decryption Time:" />
+            <TextBlock Grid.Column="1" Text="{Binding DecryptionTime, Converter={StaticResource MillisecondTimeToStringConverter}}" />
+        </StackPanel>
+
+        <Border Grid.ColumnSpan="2" Grid.Row="11" Background="Gray" />
+
+        <!-- Decryption Result -->
+        <StackPanel Grid.Row="12" Orientation="Horizontal">
+            <!-- Display "Decryption Result:" if addition was not performed or "Decrypted Sum:" otherwise. -->
+            <TextBlock Grid.Column="0" Text="Decryption Result:" Visibility="{Binding AdditionTime, Converter={StaticResource NotNullToCollapsedVisibilityConverter}}"/>
+            <TextBlock Grid.Column="0" Text="Decrypted Sum:" Visibility="{Binding AdditionTime, Converter={StaticResource NullToCollapsedVisibilityConverter}}"/>
+            <TextBlock Grid.Column="1" Text="{Binding DecryptionResult}"/>
+        </StackPanel>
+
+        <Border Grid.ColumnSpan="2" Grid.Row="13" Background="Gray" Visibility="{Binding AdditionTime, Converter={StaticResource NullToCollapsedVisibilityConverter}}"/>
+        
+        <!-- Addition Time (shown only if addition was performed) -->
+        <StackPanel Grid.Row="14">
+            <TextBlock Grid.Column="0" Text="Addition Time:" Visibility="{Binding AdditionTime, Converter={StaticResource NullToCollapsedVisibilityConverter}}" />
+            <TextBlock Grid.Column="1" Text="{Binding AdditionTime, Converter={StaticResource MillisecondTimeToStringConverter}}" Visibility="{Binding AdditionTime, Converter={StaticResource NullToCollapsedVisibilityConverter}}" />
+        </StackPanel>
+
+        <Border Grid.ColumnSpan="2" Grid.Row="15" Background="Gray"/>
+
+        <!-- Intermediary Steps -->
+        <StackPanel Grid.Row="16">
+            <TextBlock Grid.Column="0" Text="Generated Ciphers:" />
+            <ItemsControl ItemsSource="{Binding IntermediarySteps, Converter={StaticResource CipherArrayWithoutLastValueConverter}}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Vertical">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Margin="10,5" Grid.Column="0">Cipher Step:</TextBlock>
+                                <TextBlock Margin="10,5" Grid.Column="1" Text="{Binding EncryptedMessage, Converter={StaticResource BigIntToHexadecConverter}}" TextTrimming="CharacterEllipsis" />
+                            </StackPanel>
+                            <Border Grid.ColumnSpan="2" Height="1" Background="Gray"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+    </Grid>
+</UserControl>

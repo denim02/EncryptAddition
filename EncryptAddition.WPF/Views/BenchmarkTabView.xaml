@@ -12,7 +12,8 @@
     <UserControl.Resources>
         <converters:AlgorithmToBenchmarkChoiceConverter x:Key="AlgorithmToBenchmarkChoiceConverter"/>
         <converters:StringToBigIntegerArrayConverter x:Key="StringToBigIntegerArrayConverter"/>
-        <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
+        <converters:NullToCollapsedVisibilityConverter x:Key="NullToCollapsedVisibilityConverter"/>
+        <converters:BenchmarkTupleToArrayConverter x:Key="BenchmarkTupleToArrayConverter"/>
     </UserControl.Resources>
 
     <Grid>
@@ -48,20 +49,19 @@
 
             <ScrollViewer Grid.Row="0"  Margin="10">
                 <StackPanel>
-                    <!-- Placeholder for Results -->
-                    <TextBlock Text="Results will be displayed here" Margin="5"/>
-
-                    <StackPanel Visibility="{Binding BenchmarkResults, Converter={StaticResource NullToVisibilityConverter}}">
-                        <TextBlock Text="{Binding BenchmarkResults.Item1}" Visibility="{Binding BenchmarkResults, Converter={StaticResource NullToVisibilityConverter}}"/>
-                        <TextBlock Text="{Binding BenchmarkResults.Item2}" Visibility="{Binding BenchmarkResults.Item2, Converter={StaticResource NullToVisibilityConverter}}"/>
-
-                        <!-- Placeholder for Charts -->
-                        <TextBlock Text="Charts will be displayed here" Margin="5"/>
+                    <StackPanel Visibility="{Binding BenchmarkResults, Converter={StaticResource NullToCollapsedVisibilityConverter}}">
+                        <ItemsControl ItemsSource="{Binding BenchmarkResults, Converter={StaticResource BenchmarkTupleToArrayConverter}}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <controls:BenchmarkResultControl />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
                     </StackPanel>
                 </StackPanel>
             </ScrollViewer>
 
-            <controls:BenchmarkChartControl Margin="10" Grid.Row="1" VerticalAlignment="Bottom" Height="200" ChartData="{Binding BenchmarkResults}" Visibility="{Binding BenchmarkResults, Converter={StaticResource NullToVisibilityConverter}}"/>
+            <controls:BenchmarkChartControl Margin="10" Grid.Row="1" VerticalAlignment="Bottom" Height="200" ChartData="{Binding BenchmarkResults}" Visibility="{Binding BenchmarkResults, Converter={StaticResource NullToCollapsedVisibilityConverter}}"/>
         </Grid>
     </Grid>
 </UserControl>
