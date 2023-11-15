@@ -48,9 +48,9 @@ namespace EncryptAddition.Analysis.Benchmarking
         {
             double keyGenTime = _algorithmBenchmarker.TimeToGenerateKeys();
             (double encryptTime, CipherText cipher) = _algorithmBenchmarker.TimeToEncrypt(value);
-            (double decryptTime, _) = _algorithmBenchmarker.TimeToDecrypt(cipher);
+            (double decryptTime, BigInteger result) = _algorithmBenchmarker.TimeToDecrypt(cipher);
 
-            return new BenchmarkResult(EncryptionType.ToString(), BitLength, keyGenTime, encryptTime, decryptTime, new CipherText[] { cipher });
+            return new BenchmarkResult(EncryptionType.ToString(), BitLength, _algorithmBenchmarker.GetMaxPlaintextSize(), keyGenTime, encryptTime, decryptTime, result, new CipherText[] { cipher });
         }
 
         private BenchmarkResult RunBenchmarksWithAddition(BigInteger[] values)
@@ -65,9 +65,9 @@ namespace EncryptAddition.Analysis.Benchmarking
             double keyGenTime = _algorithmBenchmarker.TimeToGenerateKeys();
             (double encryptTime, CipherText[] ciphers) = _algorithmBenchmarker.TimeToEncrypt(values);
             (double addTime, CipherText cipher) = _algorithmBenchmarker.TimeToAdd(ciphers);
-            (double decryptTime, _) = _algorithmBenchmarker.TimeToDecrypt(cipher);
+            (double decryptTime, BigInteger result) = _algorithmBenchmarker.TimeToDecrypt(cipher);
 
-            return new BenchmarkResult(EncryptionType.ToString(), BitLength, keyGenTime, encryptTime, decryptTime, ciphers.Append(cipher).ToArray(), addTime);
+            return new BenchmarkResult(EncryptionType.ToString(), BitLength, _algorithmBenchmarker.GetMaxPlaintextSize(), keyGenTime, encryptTime, decryptTime, result, ciphers.Append(cipher).ToArray(), addTime);
         }
     }
 }
