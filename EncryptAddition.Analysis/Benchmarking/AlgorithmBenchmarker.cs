@@ -1,5 +1,7 @@
 ﻿using EncryptAddition.Analysis.Utils;
 using EncryptAddition.Crypto;
+using EncryptAddition.Crypto.ElGamal;
+using EncryptAddition.Crypto.Paillier;
 using System.Numerics;
 
 namespace EncryptAddition.Analysis.Benchmarking
@@ -7,16 +9,11 @@ namespace EncryptAddition.Analysis.Benchmarking
     public class AlgorithmBenchmarker
     {
         private IEncryptionStrategy _asymmetricAlgorithm;
+        private double _keyGenerationTime;
 
-        public AlgorithmBenchmarker(IEncryptionStrategy asymmetricAlgorithm)
+        public AlgorithmBenchmarker(EncryptionStrategy encryptionStrategy, int primeBitLength)
         {
-            _asymmetricAlgorithm = asymmetricAlgorithm;
-        }
-
-        internal void ChangeBitLength(int primeBitLength)
-        {
-            _asymmetricAlgorithm.SetPrimeBitLength(primeBitLength);
-            _asymmetricAlgorithm.RegenerateKeys();
+            _keyGenerationTime = Profiling.Profile(() => { return encryptionStrategy == EncryptionStrategy.ELGAMAL ? new ElGamalEncryption(primeBitLength) : new PaillierEncryption(primeBitLength); }, out _asymmetricAlgorithm);
         }
 
         public BigInteger GetMaxPlaintextSize()
@@ -74,8 +71,7 @@ namespace EncryptAddition.Analysis.Benchmarking
 
         public double TimeToGenerateKeys()
         {
-            double executionTime = Profiling.Profile(() => _asymmetricAlgorithm.RegenerateKeys());
-            return executionTime;
+            return _keyGenerationTime;
         }
     }
 }

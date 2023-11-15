@@ -1,13 +1,9 @@
 ﻿using EncryptAddition.Analysis.ResultTypes;
 using EncryptAddition.Crypto;
-using EncryptAddition.Crypto.ElGamal;
-using EncryptAddition.Crypto.Paillier;
 using System.Numerics;
 
 namespace EncryptAddition.Analysis.Benchmarking
 {
-    public enum EncryptionStrategy { PAILLIER, ELGAMAL }
-
     public class BenchmarkSuite
     {
         private AlgorithmBenchmarker _algorithmBenchmarker;
@@ -33,7 +29,7 @@ namespace EncryptAddition.Analysis.Benchmarking
             EncryptionType = encryptionType;
             BitLength = primeBitLength;
 
-            _algorithmBenchmarker = EncryptionType == EncryptionStrategy.ELGAMAL ? new AlgorithmBenchmarker(new ElGamalEncryption(BitLength)) : new AlgorithmBenchmarker(new PaillierEncryption(BitLength));
+            _algorithmBenchmarker = new AlgorithmBenchmarker(encryptionType, primeBitLength);
         }
 
         public BenchmarkResult RunBenchmarks(params BigInteger[] values)
