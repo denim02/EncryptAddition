@@ -1,5 +1,5 @@
-﻿using EncryptAddition.WPF.DataTypes;
-using EncryptAddition.WPF.ServiceAdapters;
+﻿using EncryptAddition.WPF.Models.ServiceAdapters;
+using EncryptAddition.WPF.Models.Stores;
 using EncryptAddition.WPF.ViewModels;
 using System;
 using System.Threading.Tasks;
@@ -21,8 +21,11 @@ namespace EncryptAddition.WPF.Commands
 
             try
             {
-                IAsyncAnalysisAdapter analysisAdapter = (_benchmarkTabViewModel.BenchmarkChoice == BenchmarkChoice.COMPARISON) ? new AsyncComparisonServiceAdapter(_benchmarkTabViewModel.BitLength) : new AsyncSingleBenchmarkServiceAdapter(_benchmarkTabViewModel.BenchmarkChoice, _benchmarkTabViewModel.BitLength);
-                await analysisAdapter.PrepareService();
+                var analysisServiceStore = AnalysisServiceStore.GetInstance(_benchmarkTabViewModel.BenchmarkChoice, _benchmarkTabViewModel.BitLength);
+                IAsyncAnalysisAdapter analysisAdapter = AnalysisServiceStore.AsyncAnalysisAdapter;
+
+                if (!analysisAdapter.IsReady)
+                    await analysisAdapter.PrepareService();
 
                 _benchmarkTabViewModel.IsPreparingBenchmark = false;
                 _benchmarkTabViewModel.IsBenchmarking = true;
