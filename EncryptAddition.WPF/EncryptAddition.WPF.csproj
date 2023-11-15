@@ -16,5 +16,4 @@
     <ProjectReference Include="..\EncryptAddition.Analysis\EncryptAddition.Analysis.csproj" />
     <ProjectReference Include="..\EncryptAddition.Crypto\EncryptAddition.Crypto.csproj" />
   </ItemGroup>
-
 </Project>

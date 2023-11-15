@@ -54,7 +54,7 @@
         <!-- Bit Length -->
         <StackPanel Grid.Row="2" Orientation="Horizontal">
             <TextBlock Grid.Column="0" Text="Bit Length:" />
-            <TextBlock Grid.Column="1" Text="{Binding BitLength}" />
+            <TextBlock Grid.Column="1" HorizontalAlignment="Right" Text="{Binding BitLength}" />
         </StackPanel>
 
         <Border Grid.ColumnSpan="2" Grid.Row="3" Background="Gray" />
@@ -118,7 +118,7 @@
                         <StackPanel Orientation="Vertical">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Margin="10,5" Grid.Column="0">Cipher Step:</TextBlock>
-                                <TextBlock Margin="10,5" Grid.Column="1" Text="{Binding EncryptedMessage, Converter={StaticResource BigIntToHexadecConverter}}" TextTrimming="CharacterEllipsis" />
+                                <TextBlock MaxWidth="250" Margin="10,5" Grid.Column="1" Text="{Binding EncryptedMessage, Converter={StaticResource BigIntToHexadecConverter}}" TextTrimming="CharacterEllipsis" />
                             </StackPanel>
                             <Border Grid.ColumnSpan="2" Height="1" Background="Gray"/>
                         </StackPanel>

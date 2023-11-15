@@ -11,14 +11,14 @@ namespace EncryptAddition.WPF.Converters
         {
             if (value is BigInteger bigInt)
             {
-                // If greater than 9 digits, write in scientific notation
+                // If greater than 9 digits, write in scientific notation, cap to 4 decimal places
                 if (bigInt.ToString().Length > 9)
                 {
-                    return bigInt.ToString("E");
+                    return $"{bigInt:0.0000e+0}";
                 }
                 else
                 {
-                    return bigInt.ToString();
+                    return $"{bigInt}";
                 }
             }
 

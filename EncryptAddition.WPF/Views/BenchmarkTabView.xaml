@@ -13,6 +13,7 @@
         <converters:AlgorithmToBenchmarkChoiceConverter x:Key="AlgorithmToBenchmarkChoiceConverter"/>
         <converters:StringToBigIntegerArrayConverter x:Key="StringToBigIntegerArrayConverter"/>
         <converters:NullToCollapsedVisibilityConverter x:Key="NullToCollapsedVisibilityConverter"/>
+        <converters:NotNullToCollapsedVisibilityConverter x:Key="NotNullToCollapsedVisibilityConverter"/>
         <converters:BenchmarkTupleToArrayConverter x:Key="BenchmarkTupleToArrayConverter"/>
     </UserControl.Resources>
 
@@ -47,19 +48,18 @@
                 <!-- This row will contain the chart -->
             </Grid.RowDefinitions>
 
-            <ScrollViewer Grid.Row="0"  Margin="10">
-                <StackPanel>
-                    <StackPanel Visibility="{Binding BenchmarkResults, Converter={StaticResource NullToCollapsedVisibilityConverter}}">
-                        <ItemsControl ItemsSource="{Binding BenchmarkResults, Converter={StaticResource BenchmarkTupleToArrayConverter}}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <controls:BenchmarkResultControl />
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </StackPanel>
-                </StackPanel>
-            </ScrollViewer>
+            <Grid Visibility="{Binding BenchmarkResults, Converter={StaticResource NullToCollapsedVisibilityConverter}}">
+
+                <!-- Used to display the results of only one algorithm benchmark -->
+                <ScrollViewer Grid.Row="0"  Margin="10" Visibility="{Binding BenchmarkResults.Item2, Converter={StaticResource NotNullToCollapsedVisibilityConverter}}" HorizontalScrollBarVisibility="Disabled">
+                    <controls:BenchmarkResultControl DataContext="{Binding BenchmarkResults.Item1}"/>
+                </ScrollViewer>
+
+                <!-- Used to display comparison results -->
+                <ScrollViewer Grid.Row="0"  Margin="10" Visibility="{Binding BenchmarkResults.Item2, Converter={StaticResource NullToCollapsedVisibilityConverter}}" HorizontalScrollBarVisibility="Disabled">
+                    <controls:ComparisonResultControl BenchmarkResults="{Binding BenchmarkResults}" Visibility="{Binding BenchmarkResults.Item2, Converter={StaticResource NullToCollapsedVisibilityConverter}}"/>
+                </ScrollViewer>
+            </Grid>
 
             <controls:BenchmarkChartControl Margin="10" Grid.Row="1" VerticalAlignment="Bottom" Height="200" ChartData="{Binding BenchmarkResults}" Visibility="{Binding BenchmarkResults, Converter={StaticResource NullToCollapsedVisibilityConverter}}"/>
         </Grid>
