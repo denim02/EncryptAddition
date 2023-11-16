@@ -11,9 +11,9 @@ namespace EncryptAddition.Analysis.Benchmarking
         private IEncryptionStrategy _asymmetricAlgorithm;
         private double _keyGenerationTime;
 
-        public AlgorithmBenchmarker(EncryptionStrategy encryptionStrategy, int primeBitLength)
+        public AlgorithmBenchmarker(EncryptionChoice encryptionStrategy, int primeBitLength)
         {
-            _keyGenerationTime = Profiling.Profile(() => { return encryptionStrategy == EncryptionStrategy.ELGAMAL ? new ElGamalEncryption(primeBitLength) : new PaillierEncryption(primeBitLength); }, out _asymmetricAlgorithm);
+            _keyGenerationTime = Profiling.Profile(() => { return encryptionStrategy == EncryptionChoice.ELGAMAL ? new ElGamalEncryption(primeBitLength) : new PaillierEncryption(primeBitLength); }, out _asymmetricAlgorithm);
         }
 
         public BigInteger GetMaxPlaintextSize()
