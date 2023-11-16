@@ -14,17 +14,17 @@ namespace EncryptAddition.Analysis.Benchmarking
             get => _bitLength;
             set
             {
-                if (EncryptionType == EncryptionStrategy.ELGAMAL && value < 3)
+                if (EncryptionType == EncryptionChoice.ELGAMAL && value < 3)
                     throw new ArgumentOutOfRangeException("primeBitLength", "The prime bit length must be 3 or greater for ElGamal.");
-                if (EncryptionType == EncryptionStrategy.PAILLIER && value < 2)
+                if (EncryptionType == EncryptionChoice.PAILLIER && value < 2)
                     throw new ArgumentOutOfRangeException("primeBitLength", "The prime bit length must be 2 or greater for Paillier.");
 
                 _bitLength = value;
             }
         }
-        public EncryptionStrategy EncryptionType { get; }
+        public EncryptionChoice EncryptionType { get; }
 
-        public BenchmarkSuite(EncryptionStrategy encryptionType, int primeBitLength)
+        public BenchmarkSuite(EncryptionChoice encryptionType, int primeBitLength)
         {
             EncryptionType = encryptionType;
             BitLength = primeBitLength;

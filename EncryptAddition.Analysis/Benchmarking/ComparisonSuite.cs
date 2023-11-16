@@ -1,4 +1,5 @@
 ﻿using EncryptAddition.Analysis.ResultTypes;
+using EncryptAddition.Crypto;
 using System.Numerics;
 
 namespace EncryptAddition.Analysis.Benchmarking
@@ -26,8 +27,8 @@ namespace EncryptAddition.Analysis.Benchmarking
         {
             BitLength = primeBitLength;
 
-            _elGamalSuite = new BenchmarkSuite(EncryptionStrategy.ELGAMAL, BitLength);
-            _paillierSuite = new BenchmarkSuite(EncryptionStrategy.PAILLIER, BitLength);
+            _elGamalSuite = new BenchmarkSuite(EncryptionChoice.ELGAMAL, BitLength);
+            _paillierSuite = new BenchmarkSuite(EncryptionChoice.PAILLIER, BitLength);
         }
 
         public (BenchmarkResult PaillierResult, BenchmarkResult ElGamalResult) RunBenchmarks(params BigInteger[] values)
