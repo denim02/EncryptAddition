@@ -22,7 +22,7 @@ namespace EncryptAddition.WPF.Commands
             try
             {
                 var analysisServiceStore = AnalysisServiceStore.GetInstance(_benchmarkTabViewModel.BenchmarkChoice, _benchmarkTabViewModel.BitLength);
-                IAsyncAnalysisAdapter analysisAdapter = AnalysisServiceStore.AsyncAnalysisAdapter;
+                IAsyncAnalysisAdapter analysisAdapter = analysisServiceStore.AsyncAnalysisAdapter;
 
                 if (!analysisAdapter.IsReady)
                     await analysisAdapter.PrepareService();

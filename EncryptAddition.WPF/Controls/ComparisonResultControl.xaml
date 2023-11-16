@@ -9,8 +9,8 @@
 
     <Grid Grid.IsSharedSizeScope="True">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*" SharedSizeGroup="A"/>
-            <ColumnDefinition Width="1*" SharedSizeGroup="A"/>
+            <ColumnDefinition Width="*" SharedSizeGroup="A"/>
+            <ColumnDefinition Width="*" SharedSizeGroup="A"/>
         </Grid.ColumnDefinitions>
 
         <local:BenchmarkResultControl DataContext="{Binding BenchmarkResults.Item1}" Grid.Column="0"/>

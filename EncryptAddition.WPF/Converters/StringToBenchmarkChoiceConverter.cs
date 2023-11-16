@@ -5,7 +5,7 @@ using System.Windows.Data;
 
 namespace EncryptAddition.WPF.Converters
 {
-    public class AlgorithmToBenchmarkChoiceConverter : IValueConverter
+    public class StringToBenchmarkChoiceConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -20,10 +20,10 @@ namespace EncryptAddition.WPF.Converters
                     case BenchmarkChoice.COMPARISON:
                         return "Comparison";
                     default:
-                        return "Paillier";
+                        return null;
                 }
             }
-            return "Paillier";
+            return null;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -39,10 +39,10 @@ namespace EncryptAddition.WPF.Converters
                     case "Comparison":
                         return BenchmarkChoice.COMPARISON;
                     default:
-                        return "Paillier";
+                        return null;
                 }
             }
-            return "Paillier";
+            return null;
         }
     }
 }

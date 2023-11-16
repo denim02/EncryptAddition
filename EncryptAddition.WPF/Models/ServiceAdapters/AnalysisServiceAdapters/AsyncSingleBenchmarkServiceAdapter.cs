@@ -10,7 +10,6 @@ namespace EncryptAddition.WPF.Models.ServiceAdapters
     public class AsyncSingleBenchmarkServiceAdapter : IAsyncAnalysisAdapter
     {
         private SingleBenchmarkService _singleBenchmarkService;
-
         public bool IsReady { get; private set; } = false;
 
         public AsyncSingleBenchmarkServiceAdapter(BenchmarkChoice choice, int bitLength)

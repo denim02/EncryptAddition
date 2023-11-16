@@ -9,7 +9,7 @@ namespace EncryptAddition.WPF.ViewModels
 {
     public class BenchmarkTabViewModel : BaseViewModel
     {
-        public string[] StrategyList { get; } = new string[] { "ElGamal", "Paillier", "Comparison" };
+        public string[] StrategyList { get; } = { "ElGamal", "Paillier", "Comparison" };
 
         private BenchmarkChoice _benchmarkChoice = BenchmarkChoice.PAILLIER;
         public BenchmarkChoice BenchmarkChoice
@@ -64,6 +64,7 @@ namespace EncryptAddition.WPF.ViewModels
             {
                 _isPreparingBenchmark = value;
                 OnPropertyChanged(nameof(IsPreparingBenchmark));
+                OnPropertyChanged(nameof(IsBusy));
             }
         }
 
@@ -75,10 +76,25 @@ namespace EncryptAddition.WPF.ViewModels
             {
                 _isBenchmarking = value;
                 OnPropertyChanged(nameof(IsBenchmarking));
+                OnPropertyChanged(nameof(IsBusy));
             }
         }
 
         public bool IsBusy => IsBenchmarking || IsPreparingBenchmark;
+
+        private bool _hasValidationErrors;
+        public bool HasValidationErrors
+        {
+            get => _hasValidationErrors;
+            set
+            {
+                if (_hasValidationErrors != value)
+                {
+                    _hasValidationErrors = value;
+                    OnPropertyChanged(nameof(HasValidationErrors));
+                }
+            }
+        }
 
         public ICommand ExecuteBenchmark { get; }
 

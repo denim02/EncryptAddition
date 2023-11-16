@@ -1,5 +1,6 @@
 ﻿using EncryptAddition.Analysis.Benchmarking;
 using EncryptAddition.Analysis.ResultTypes;
+using EncryptAddition.Crypto;
 using EncryptAddition.WPF.DataTypes;
 using System;
 using System.Numerics;
@@ -10,7 +11,7 @@ namespace EncryptAddition.WPF.Models.Services
     {
         private BenchmarkSuite? _benchmarkSuite;
 
-        private readonly EncryptionStrategy _encryptionStrategy;
+        private readonly EncryptionChoice _encryptionStrategy;
         private readonly int _bitLength;
 
         public SingleBenchmarkService(BenchmarkChoice choice, int bitLength)
@@ -32,14 +33,14 @@ namespace EncryptAddition.WPF.Models.Services
             return _benchmarkSuite.RunBenchmarks(inputs);
         }
 
-        private static EncryptionStrategy BenchmarkChoiceToEncryptionStrategyConvert(BenchmarkChoice choice)
+        private static EncryptionChoice BenchmarkChoiceToEncryptionStrategyConvert(BenchmarkChoice choice)
         {
             switch (choice)
             {
                 case BenchmarkChoice.PAILLIER:
-                    return EncryptionStrategy.PAILLIER;
+                    return EncryptionChoice.PAILLIER;
                 case BenchmarkChoice.ELGAMAL:
-                    return EncryptionStrategy.ELGAMAL;
+                    return EncryptionChoice.ELGAMAL;
                 default:
                     throw new ArgumentException("Invalid choice.");
             }

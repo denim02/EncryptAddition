@@ -9,7 +9,7 @@ namespace EncryptAddition.WPF.Models.Stores
 
         private static int _bitLength;
         private static BenchmarkChoice _choice;
-        public static IAsyncAnalysisAdapter AsyncAnalysisAdapter { get; private set; }
+        public IAsyncAnalysisAdapter AsyncAnalysisAdapter { get; private set; }
 
         private AnalysisServiceStore(BenchmarkChoice choice, int primeBitLength)
         {

@@ -14,14 +14,26 @@
         <converters:MillisecondTimeToStringConverter x:Key="MillisecondTimeToStringConverter" />
         <converters:BigIntToScientificNotationConverter x:Key="BigIntToScientificNotationConverter" />
         <converters:BigIntToHexadecConverter x:Key="BigIntToHexadecConverter" />
+
+        <Style TargetType="TextBlock" x:Key="ResultTextBlockStyle">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+        </Style>
+
+        <Style TargetType="Border" x:Key="ResultBorderStyle">
+            <Setter Property="Background" Value="#FFCCCCCC"/>
+            <Setter Property="Height" Value="1"/>
+        </Style>
+
+        <Style TargetType="TextBlock" x:Key="AlgorithmNameStyle" BasedOn="{StaticResource ResultTextBlockStyle}">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+        </Style>
     </UserControl.Resources>
-    
+
     <Grid Margin="5">
-        <Grid.Resources>
-            <Style TargetType="{x:Type TextBlock}">
-                <Setter Property="Margin" Value="10,5"/>
-            </Style>
-        </Grid.Resources>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*" />
@@ -47,80 +59,80 @@
         </Grid.RowDefinitions>
 
         <!-- Algorithm Name -->
-        <TextBlock FontWeight="Bold" Grid.Row="0"  Grid.Column="0" Text="{Binding AlgorithmName}"/>
+        <TextBlock Style="{StaticResource AlgorithmNameStyle}" Grid.Row="0" Grid.Column="0" Text="{Binding AlgorithmName}"/>
 
-        <Border Grid.ColumnSpan="2" Grid.Row="1" Background="Gray" />
+        <Border Grid.ColumnSpan="2" Grid.Row="1" BorderThickness="1" Style="{StaticResource ResultBorderStyle}"/>
 
         <!-- Bit Length -->
         <StackPanel Grid.Row="2" Orientation="Horizontal">
-            <TextBlock Grid.Column="0" Text="Bit Length:" />
-            <TextBlock Grid.Column="1" HorizontalAlignment="Right" Text="{Binding BitLength}" />
+            <TextBlock Grid.Column="0" Text="Bit Length:" Style="{StaticResource ResultTextBlockStyle}"/>
+            <TextBlock Grid.Column="1" Style="{StaticResource ResultTextBlockStyle}" Text="{Binding BitLength}" />
         </StackPanel>
 
-        <Border Grid.ColumnSpan="2" Grid.Row="3" Background="Gray" />
+        <Border Grid.ColumnSpan="2" Grid.Row="3" Style="{StaticResource ResultBorderStyle}" />
 
         <!-- Maximum Plaintext Size -->
         <StackPanel Grid.Row="4" Orientation="Horizontal">
-            <TextBlock Grid.Column="0" Text="Maximum Plaintext Size:" />
-            <TextBlock Grid.Column="1" Text="{Binding MaxPlaintextSize, Converter={StaticResource BigIntToScientificNotationConverter}}" />
+            <TextBlock Grid.Column="0" Style="{StaticResource ResultTextBlockStyle}" Text="Maximum Plaintext Size:" />
+            <TextBlock Grid.Column="1" Style="{StaticResource ResultTextBlockStyle}" Text="{Binding MaxPlaintextSize, Converter={StaticResource BigIntToScientificNotationConverter}}" />
         </StackPanel>
 
-        <Border Grid.ColumnSpan="2" Grid.Row="5" Background="Gray" />
+        <Border Grid.ColumnSpan="2" Grid.Row="5" Style="{StaticResource ResultBorderStyle}" />
 
         <!-- Key Generation Time -->
         <StackPanel Grid.Row="6" Orientation="Horizontal">
-            <TextBlock Grid.Column="0" Text="Key Generation Time:" />
-            <TextBlock Grid.Column="1" Text="{Binding KeyGenerationTime, Converter={StaticResource MillisecondTimeToStringConverter}}" />
+            <TextBlock Grid.Column="0" Style="{StaticResource ResultTextBlockStyle}" Text="Key Generation Time:" />
+            <TextBlock Grid.Column="1" Style="{StaticResource ResultTextBlockStyle}" Text="{Binding KeyGenerationTime, Converter={StaticResource MillisecondTimeToStringConverter}}" />
         </StackPanel>
 
-        <Border Grid.ColumnSpan="2" Grid.Row="7" Background="Gray" />
+        <Border Grid.ColumnSpan="2" Grid.Row="7" Style="{StaticResource ResultBorderStyle}" />
 
         <!-- Encryption Time -->
         <StackPanel Grid.Row="8" Orientation="Horizontal">
-            <TextBlock Grid.Column="0" Text="Encryption Time:" />
-            <TextBlock Grid.Column="1" Text="{Binding EncryptionTime, Converter={StaticResource MillisecondTimeToStringConverter}}" />
+            <TextBlock Grid.Column="0" Style="{StaticResource ResultTextBlockStyle}" Text="Encryption Time:" />
+            <TextBlock Grid.Column="1" Style="{StaticResource ResultTextBlockStyle}" Text="{Binding EncryptionTime, Converter={StaticResource MillisecondTimeToStringConverter}}" />
         </StackPanel>
 
-        <Border Grid.ColumnSpan="2" Grid.Row="9" Background="Gray" />
+        <Border Grid.ColumnSpan="2" Grid.Row="9" Style="{StaticResource ResultBorderStyle}" />
 
         <!-- Decryption Time -->
         <StackPanel Grid.Row="10" Orientation="Horizontal">
-            <TextBlock Grid.Column="0" Text="Decryption Time:" />
-            <TextBlock Grid.Column="1" Text="{Binding DecryptionTime, Converter={StaticResource MillisecondTimeToStringConverter}}" />
+            <TextBlock Grid.Column="0" Style="{StaticResource ResultTextBlockStyle}" Text="Decryption Time:" />
+            <TextBlock Grid.Column="1" Style="{StaticResource ResultTextBlockStyle}" Text="{Binding DecryptionTime, Converter={StaticResource MillisecondTimeToStringConverter}}" />
         </StackPanel>
 
-        <Border Grid.ColumnSpan="2" Grid.Row="11" Background="Gray" />
+        <Border Grid.ColumnSpan="2" Grid.Row="11" Style="{StaticResource ResultBorderStyle}" />
 
         <!-- Decryption Result -->
         <StackPanel Grid.Row="12" Orientation="Horizontal">
             <!-- Display "Decryption Result:" if addition was not performed or "Decrypted Sum:" otherwise. -->
-            <TextBlock Grid.Column="0" Text="Decryption Result:" Visibility="{Binding AdditionTime, Converter={StaticResource NotNullToCollapsedVisibilityConverter}}"/>
-            <TextBlock Grid.Column="0" Text="Decrypted Sum:" Visibility="{Binding AdditionTime, Converter={StaticResource NullToCollapsedVisibilityConverter}}"/>
-            <TextBlock Grid.Column="1" Text="{Binding DecryptionResult}"/>
+            <TextBlock Grid.Column="0" Style="{StaticResource ResultTextBlockStyle}" Text="Decryption Result:" Visibility="{Binding AdditionTime, Converter={StaticResource NotNullToCollapsedVisibilityConverter}}"/>
+            <TextBlock Grid.Column="0" Style="{StaticResource ResultTextBlockStyle}" Text="Decrypted Sum:" Visibility="{Binding AdditionTime, Converter={StaticResource NullToCollapsedVisibilityConverter}}"/>
+            <TextBlock Grid.Column="1" Style="{StaticResource ResultTextBlockStyle}" Text="{Binding DecryptionResult}"/>
         </StackPanel>
 
-        <Border Grid.ColumnSpan="2" Grid.Row="13" Background="Gray" Visibility="{Binding AdditionTime, Converter={StaticResource NullToCollapsedVisibilityConverter}}"/>
+        <Border Grid.ColumnSpan="2" Grid.Row="13" Style="{StaticResource ResultBorderStyle}" Visibility="{Binding AdditionTime, Converter={StaticResource NullToCollapsedVisibilityConverter}}"/>
         
         <!-- Addition Time (shown only if addition was performed) -->
-        <StackPanel Grid.Row="14">
-            <TextBlock Grid.Column="0" Text="Addition Time:" Visibility="{Binding AdditionTime, Converter={StaticResource NullToCollapsedVisibilityConverter}}" />
-            <TextBlock Grid.Column="1" Text="{Binding AdditionTime, Converter={StaticResource MillisecondTimeToStringConverter}}" Visibility="{Binding AdditionTime, Converter={StaticResource NullToCollapsedVisibilityConverter}}" />
+        <StackPanel Grid.Row="14" Orientation="Horizontal">
+            <TextBlock Grid.Column="0" Style="{StaticResource ResultTextBlockStyle}" Text="Addition Time:" Visibility="{Binding AdditionTime, Converter={StaticResource NullToCollapsedVisibilityConverter}}" />
+            <TextBlock Grid.Column="1" Style="{StaticResource ResultTextBlockStyle}" Text="{Binding AdditionTime, Converter={StaticResource MillisecondTimeToStringConverter}}" Visibility="{Binding AdditionTime, Converter={StaticResource NullToCollapsedVisibilityConverter}}" />
         </StackPanel>
 
-        <Border Grid.ColumnSpan="2" Grid.Row="15" Background="Gray"/>
+        <Border Grid.ColumnSpan="2" Grid.Row="15" Style="{StaticResource ResultBorderStyle}"/>
 
         <!-- Intermediary Steps -->
         <StackPanel Grid.Row="16">
-            <TextBlock Grid.Column="0" Text="Generated Ciphers:" />
+            <TextBlock Grid.Column="0" Style="{StaticResource ResultTextBlockStyle}" Text="Generated Ciphers:" />
             <ItemsControl ItemsSource="{Binding IntermediarySteps, Converter={StaticResource CipherArrayWithoutLastValueConverter}}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Vertical">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Margin="10,5" Grid.Column="0">Cipher Step:</TextBlock>
-                                <TextBlock MaxWidth="250" Margin="10,5" Grid.Column="1" Text="{Binding EncryptedMessage, Converter={StaticResource BigIntToHexadecConverter}}" TextTrimming="CharacterEllipsis" />
+                                <TextBlock Style="{StaticResource ResultTextBlockStyle}" Grid.Column="0">Cipher:</TextBlock>
+                                <TextBlock MaxWidth="250" Style="{StaticResource ResultTextBlockStyle}" Grid.Column="1" Text="{Binding EncryptedMessage, Converter={StaticResource BigIntToHexadecConverter}}" TextTrimming="CharacterEllipsis" />
                             </StackPanel>
-                            <Border Grid.ColumnSpan="2" Height="1" Background="Gray"/>
+                            <Border Grid.ColumnSpan="2" Style="{StaticResource ResultBorderStyle}"/>
                         </StackPanel>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
