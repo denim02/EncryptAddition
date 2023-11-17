@@ -13,7 +13,7 @@ namespace EncryptAddition.Analysis.Benchmarking
 
         public AlgorithmBenchmarker(EncryptionChoice encryptionStrategy, int primeBitLength)
         {
-            _keyGenerationTime = Profiling.Profile(() => { return encryptionStrategy == EncryptionChoice.ELGAMAL ? new ElGamalEncryption(primeBitLength) : new PaillierEncryption(primeBitLength); }, out _asymmetricAlgorithm);
+            _keyGenerationTime = Profiling.Profile(() => { return encryptionStrategy == EncryptionChoice.ElGamal ? new ElGamalEncryption(primeBitLength) : new PaillierEncryption(primeBitLength); }, out _asymmetricAlgorithm);
         }
 
         public BigInteger GetMaxPlaintextSize()

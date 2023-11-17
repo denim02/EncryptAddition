@@ -27,8 +27,8 @@ namespace EncryptAddition.Analysis.Benchmarking
         {
             BitLength = primeBitLength;
 
-            _elGamalSuite = new BenchmarkSuite(EncryptionChoice.ELGAMAL, BitLength);
-            _paillierSuite = new BenchmarkSuite(EncryptionChoice.PAILLIER, BitLength);
+            _elGamalSuite = new BenchmarkSuite(EncryptionChoice.ElGamal, BitLength);
+            _paillierSuite = new BenchmarkSuite(EncryptionChoice.Paillier, BitLength);
         }
 
         public (BenchmarkResult PaillierResult, BenchmarkResult ElGamalResult) RunBenchmarks(params BigInteger[] values)

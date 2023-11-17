@@ -28,9 +28,9 @@ namespace EncryptAddition.WPF.Models.Services
         public void PrepareService()
         {
             if (_serializedKey != null)
-                _encryptionStrategy = _algorithmChoice == EncryptionChoice.ELGAMAL ? new ElGamalEncryption(Crypto.ElGamal.KeyPair.Deserialize(_serializedKey)) : new PaillierEncryption(Crypto.Paillier.KeyPair.Deserialize(_serializedKey));
+                _encryptionStrategy = _algorithmChoice == EncryptionChoice.ElGamal ? new ElGamalEncryption(Crypto.ElGamal.KeyPair.Deserialize(_serializedKey)) : new PaillierEncryption(Crypto.Paillier.KeyPair.Deserialize(_serializedKey));
             else
-                _encryptionStrategy = _algorithmChoice == EncryptionChoice.ELGAMAL ? new ElGamalEncryption(_bitLength) : new PaillierEncryption(_bitLength);
+                _encryptionStrategy = _algorithmChoice == EncryptionChoice.ElGamal ? new ElGamalEncryption(_bitLength) : new PaillierEncryption(_bitLength);
         }
 
         public CipherText[] Encrypt(BigInteger[] inputs)

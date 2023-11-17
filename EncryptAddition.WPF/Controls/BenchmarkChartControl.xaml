@@ -3,6 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
              MaxWidth="900">
+    
+    <!-- #region Resources -->
     <UserControl.Resources>
         <!-- Style for chart axis -->
         <Style TargetType="{x:Type lvc:Axis}" x:Key="ChartAxisStyle">
@@ -17,7 +19,9 @@
             <Setter Property="Padding" Value="4"/>
         </Style>
     </UserControl.Resources>
+    <!-- #endregion -->
     
+    <!-- #region CHart -->
     <Grid>
         <lvc:CartesianChart x:Name="CartesianChart" Style="{StaticResource CartesianChartStyle}">
             <lvc:CartesianChart.AxisX>
@@ -28,4 +32,5 @@
             </lvc:CartesianChart.AxisY>
         </lvc:CartesianChart>
     </Grid>
+    <!-- #endregion -->
 </UserControl>

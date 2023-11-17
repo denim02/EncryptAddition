@@ -13,9 +13,9 @@ namespace EncryptAddition.WPF.Converters
             {
                 switch (choice)
                 {
-                    case EncryptionChoice.PAILLIER:
+                    case EncryptionChoice.Paillier:
                         return "Paillier";
-                    case EncryptionChoice.ELGAMAL:
+                    case EncryptionChoice.ElGamal:
                         return "ElGamal";
                     default:
                         return null;
@@ -31,9 +31,9 @@ namespace EncryptAddition.WPF.Converters
                 switch (content)
                 {
                     case "Paillier":
-                        return EncryptionChoice.PAILLIER;
+                        return EncryptionChoice.Paillier;
                     case "ElGamal":
-                        return EncryptionChoice.ELGAMAL;
+                        return EncryptionChoice.ElGamal;
                     default:
                         return null;
                 }

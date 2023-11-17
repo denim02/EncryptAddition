@@ -7,13 +7,17 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
+    <!-- #region Control -->
     <Grid Grid.IsSharedSizeScope="True">
+        <!-- Grid definition for equal width columns -->
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" SharedSizeGroup="A"/>
             <ColumnDefinition Width="*" SharedSizeGroup="A"/>
         </Grid.ColumnDefinitions>
 
+        <!-- The two benchmark results -->
         <local:BenchmarkResultControl DataContext="{Binding BenchmarkResults.Item1}" Grid.Column="0"/>
         <local:BenchmarkResultControl DataContext="{Binding BenchmarkResults.Item2}" Grid.Column="1"/>
     </Grid>
+    <!-- #endregion -->
 </UserControl>

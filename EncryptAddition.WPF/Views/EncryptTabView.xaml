@@ -3,47 +3,30 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:EncryptAddition.WPF.Views"
              xmlns:controls="clr-namespace:EncryptAddition.WPF.Controls"
-             xmlns:validation="clr-namespace:EncryptAddition.WPF.ViewModels.ValidationRules"
              xmlns:converters="clr-namespace:EncryptAddition.WPF.Converters"
+             xmlns:validation="clr-namespace:EncryptAddition.WPF.ViewModels.ValidationRules"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
+    <!-- #region Resources -->
     <UserControl.Resources>
-        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <!-- Converters -->
         <converters:StringToEncryptionChoiceConverter x:Key="StringToEncryptionChoiceConverter"/>
-        <converters:NullToVisibilityConverter x:Key="NullToCollapsedVisibilityConverter"/>
         <converters:StringToBigIntegerArrayConverter x:Key="StringToBigIntegerArrayConverter"/>
         <converters:StringToCipherArrayConverter x:Key="StringToCipherArrayConverter"/>
         <converters:OperationChoiceToVisibilityConverter x:Key="OperationChoiceToVisibilityConverter"/>
         <converters:VisibilityToBooleanConverter x:Key="VisibilityToBooleanConverter"/>
+        <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
 
+        <!-- Validation Rules -->
         <validation:SerializedCustomKeyRule x:Key="SerializedCustomKeyRule"/>
         <validation:BitLengthRangeRule x:Key="BitLengthRangeRule"/>
         <validation:InputValuesRule x:Key="InputValuesRule"/>
         <validation:DecryptValuesRule x:Key="DecryptValuesRule"/>
 
-        <SolidColorBrush x:Key="SidebarBackgroundColor" Color="#FFFAFAFA"/>
-        <SolidColorBrush x:Key="MainAreaBackgroundColor" Color="#FFFFFFFF"/>
-        <SolidColorBrush x:Key="BorderColor" Color="#FFDDDDDD"/>
-        <SolidColorBrush x:Key="InputForeground" Color="#FF000000"/>
-        <SolidColorBrush x:Key="InputBackground" Color="#FFFFFFFF"/>
-        <Style TargetType="Label">
-            <Setter Property="FontFamily" Value="Segoe UI"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Margin" Value="0,5,0,1"/>
-        </Style>
-        <Style TargetType="TextBox">
-            <Setter Property="FontFamily" Value="Segoe UI"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="Padding" Value="3"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="BorderBrush" Value="{StaticResource BorderColor}"/>
-            <Setter Property="Foreground" Value="{StaticResource InputForeground}"/>
-            <Setter Property="Background" Value="{StaticResource InputBackground}"/>
-        </Style>
+        <!-- Style rule that blocks button if validation errors have occured -->
         <Style TargetType="Button">
             <Setter Property="FontFamily" Value="Segoe UI"/>
             <Setter Property="FontSize" Value="14"/>
@@ -64,56 +47,30 @@
                 </MultiDataTrigger>
             </Style.Triggers>
         </Style>
-        <Style TargetType="ComboBox">
-            <Setter Property="FontFamily" Value="Segoe UI"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="Padding" Value="4"/>
-            <Setter Property="ItemContainerStyle">
-                <Setter.Value>
-                    <Style TargetType="ComboBoxItem">
-                        <Setter Property="Padding" Value="2"/>
-                        <Setter Property="FontFamily" Value="Segoe UI"/>
-                        <Setter Property="FontSize" Value="14"/>
-                    </Style>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style x:Key="StatusMessageStyle" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="FontFamily" Value="Segoe UI"/>
-            <Setter Property="Margin" Value="10"/>
-        </Style>
-        <Style TargetType="RadioButton">
-            <Setter Property="FontFamily" Value="Segoe UI"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="Padding" Value="4"/>
-            <Setter Property="HorizontalAlignment" Value="Left"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-        </Style>
-
     </UserControl.Resources>
+    <!-- #endregion -->
 
-    <Grid>
+    <Grid Background="{StaticResource MainAreaBackgroundColor}">
+        <!-- Grid definition for entire tab -->
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <!-- Sidebar Content -->
+        <!-- #region Sidebar -->
         <Border Grid.Column="0" Background="{StaticResource SidebarBackgroundColor}" Margin="10" Padding="5" BorderBrush="{StaticResource BorderColor}" BorderThickness="1">
             <StackPanel Grid.Column="0" Width="200" Margin="10">
 
                 <!-- Algorithm Choice -->
                 <Label Content="_Algorithm:" Target="{Binding ElementName=cbAlgorithm}"/>
-                <ComboBox Name="cbAlgorithm" ItemsSource="{Binding StrategyList}" SelectedItem="{Binding EncryptionChoice, Converter={StaticResource StringToEncryptionChoiceConverter}, Mode=TwoWay}" />
+                <ComboBox Name="cbAlgorithm" ItemsSource="{Binding StrategyList}" SelectedItem="{Binding EncryptionChoice, Mode=TwoWay}" />
                 
-                <!-- Key Choice Section -->
+                <!-- #region Key Choice Section -->
                 <RadioButton x:Name="autoKeyRadioButton" Content="Auto-generated Key" GroupName="KeyChoice" Checked="KeyChoiceRadioButton_Checked"/>
                 <RadioButton x:Name="customKeyRadioButton" Content="Custom Key" GroupName="KeyChoice" Checked="KeyChoiceRadioButton_Checked"/>
 
-                <StackPanel x:Name="customKeyPanel" Visibility="{Binding IsKeyAutoGenerated, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=NEGATE}">
+                <!-- Custom Key Input Field -->
+                <StackPanel x:Name="customKeyPanel" Visibility="{Binding IsKeyAutoGenerated, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=NEGATE}">
                     <Label Content="_Enter Key:" Target="{Binding ElementName=txtCustomKey}"/>
                     <TextBox x:Name="txtCustomKey">
                         <TextBox.Text>
@@ -133,7 +90,8 @@
                     </TextBox>
                 </StackPanel>
 
-                <StackPanel x:Name="bitLengthPanel" Visibility="{Binding IsKeyAutoGenerated, Converter={StaticResource BoolToVisibilityConverter}}">
+                <!-- Bit Length Field -->
+                <StackPanel x:Name="bitLengthPanel" Visibility="{Binding IsKeyAutoGenerated, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <Label Content="_Bit Length:" Target="{Binding ElementName=txtBitLength}"/>
                     <TextBox Name="txtBitLength" Margin="5">
                         <TextBox.Text>
@@ -152,17 +110,17 @@
                         </TextBox.ToolTip>
                     </TextBox>
                 </StackPanel>
-                <!-- END KEY SELECTION -->
+                <!-- #endregion -->
                 
-                <!-- Operation Selection -->
+                <!-- #region Operation Selection -->
                 <RadioButton x:Name="encryptRadioButton" Content="Encryption" GroupName="OperationChoice" Checked="OperationChoiceRadioButton_Checked"/>
                 <RadioButton x:Name="decryptRadioButton" Content="Decryption" GroupName="OperationChoice" Checked="OperationChoiceRadioButton_Checked" IsEnabled="{Binding CanDecrypt}"/>
-                <!-- END OPERATION SELECTION -->
+                <!-- #endregion -->
                 
-                <!-- Input Values field -->
-                <StackPanel Visibility="{Binding OperationChoice, Converter={StaticResource OperationChoiceToVisibilityConverter},ConverterParameter=ENCRYPTION}">
+                <!-- #region Input Values Fields -->
+                <!-- Encryption Values Field-->
+                <StackPanel Visibility="{Binding OperationChoice, Converter={StaticResource OperationChoiceToVisibilityConverter}, ConverterParameter=ENCRYPTION}">
                     <Label Content="_Input Values" Target="{Binding ElementName=txtEncryptInputValues}"/>
-                    <!-- Textbox shown for encryption -->
                     <TextBox Name="txtEncryptInputValues" Margin="5">
                         <TextBox.Text>
                             <Binding Path="EncryptionInputValues" UpdateSourceTrigger="PropertyChanged" Mode="OneWayToSource" Converter="{StaticResource StringToBigIntegerArrayConverter}">
@@ -180,9 +138,10 @@
                         </TextBox.ToolTip>
                     </TextBox>
                 </StackPanel>
+                
+                <!-- Decryption Values Field -->
                 <StackPanel Visibility="{Binding OperationChoice, Converter={StaticResource OperationChoiceToVisibilityConverter},ConverterParameter=DECRYPTION}">
                     <Label Content="_Input Values" Target="{Binding ElementName=txtDecryptInputValues}"/>
-                    <!-- Textbox shown for encryption -->
                     <TextBox Name="txtDecryptInputValues" Margin="5">
                         <TextBox.Text>
                             <Binding Path="DecryptionInputValues" UpdateSourceTrigger="PropertyChanged" Mode="OneWayToSource" Converter="{StaticResource StringToCipherArrayConverter}">
@@ -200,21 +159,23 @@
                         </TextBox.ToolTip>
                     </TextBox>
                 </StackPanel>
-                <!-- END INPUT VALUES FIELD -->
+                <!-- #endregion -->
 
+                <!-- Run Button -->
                 <Button Name="btnRun" Content="_Run Operation" Command="{Binding ExecuteOperation}"/>
             </StackPanel>
         </Border>
 
-        <!-- Main Content Area -->
+        <!-- #region Main Content Area -->
         <Border Grid.Column="1" BorderBrush="{StaticResource BorderColor}" BorderThickness="1" Padding="10">
-            <Grid Grid.Column="1" Visibility="{Binding Result, Converter={StaticResource NullToCollapsedVisibilityConverter}}">
+            <Grid Grid.Column="1" Visibility="{Binding Result, Converter={StaticResource NullToVisibilityConverter}}">
                 <controls:EncryptionServiceResultControl DataContext="{Binding Result}"/>
             </Grid>
         </Border>
+        <!-- #endregion -->
 
-        <!-- Overlay Grid for the Progress Bar and Status Message -->
-        <Grid Grid.Column="1" Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}}">
+        <!-- #region Overlay Grid for the Progress Bar and Status Message -->
+        <Grid Grid.Column="1" Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}">
             <!-- Semi-transparent overlay background -->
             <Rectangle Fill="#EEFFFFFF"/>
 
@@ -240,5 +201,6 @@
                 </TextBlock>
             </StackPanel>
         </Grid>
+        <!-- #endregion -->
     </Grid>
 </UserControl>

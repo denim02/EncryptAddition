@@ -9,6 +9,7 @@ namespace EncryptAddition.WPF.ViewModels
 {
     public class BenchmarkTabViewModel : BaseViewModel
     {
+        public BenchmarkChoice[] StrategyList { get; } = { BenchmarkChoice.Paillier, BenchmarkChoice.ElGamal, BenchmarkChoice.Comparison };
         private BenchmarkChoice _benchmarkChoice = BenchmarkChoice.Paillier;
         public BenchmarkChoice BenchmarkChoice
         {

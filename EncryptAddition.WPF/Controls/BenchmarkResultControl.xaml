@@ -6,32 +6,29 @@
              xmlns:converters="clr-namespace:EncryptAddition.WPF.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    
+    <!-- #region Resources -->
     <UserControl.Resources>
-        <converters:CipherArrayWithoutLastValueConverter x:Key="CipherArrayWithoutLastValueConverter" />
-        <converters:MillisecondTimeToStringConverter x:Key="MillisecondTimeToStringConverter" />
-        <converters:BigIntToScientificNotationConverter x:Key="BigIntToScientificNotationConverter" />
-        <converters:BigIntToHexadecConverter x:Key="BigIntToHexadecConverter" />
-        <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
-
-        <Style TargetType="TextBlock" x:Key="ResultTextBlockStyle">
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="FontFamily" Value="Segoe UI"/>
-        </Style>
-
-        <Style TargetType="Border" x:Key="ResultBorderStyle">
-            <Setter Property="Background" Value="#FFCCCCCC"/>
-            <Setter Property="Height" Value="1"/>
-        </Style>
-
-        <Style TargetType="TextBlock" x:Key="AlgorithmNameStyle" BasedOn="{StaticResource ResultTextBlockStyle}">
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="FontSize" Value="16"/>
-            <Setter Property="HorizontalAlignment" Value="Left"/>
-        </Style>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!-- Result Styles -->
+                <ResourceDictionary Source="ResultStyles.xaml"/>
+                <ResourceDictionary>
+                    <!-- Converters -->
+                    <converters:CipherArrayWithoutLastValueConverter x:Key="CipherArrayWithoutLastValueConverter" />
+                    <converters:MillisecondTimeToStringConverter x:Key="MillisecondTimeToStringConverter" />
+                    <converters:BigIntToScientificNotationConverter x:Key="BigIntToScientificNotationConverter" />
+                    <converters:BigIntToHexadecConverter x:Key="BigIntToHexadecConverter" />
+                    <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </UserControl.Resources>
+    <!-- #endregion -->
 
+    <!-- #region Control -->
     <Grid Margin="5">
+        <!-- Grid definition for result -->
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*" />
@@ -58,7 +55,6 @@
 
         <!-- Algorithm Name -->
         <TextBlock Style="{StaticResource AlgorithmNameStyle}" Grid.Row="0" Grid.Column="0" Text="{Binding AlgorithmName}"/>
-
         <Border Grid.ColumnSpan="2" Grid.Row="1" BorderThickness="1" Style="{StaticResource ResultBorderStyle}"/>
 
         <!-- Bit Length -->
@@ -66,7 +62,6 @@
             <TextBlock Grid.Column="0" Text="Bit Length:" Style="{StaticResource ResultTextBlockStyle}"/>
             <TextBlock Grid.Column="1" Style="{StaticResource ResultTextBlockStyle}" Text="{Binding BitLength}" />
         </StackPanel>
-
         <Border Grid.ColumnSpan="2" Grid.Row="3" Style="{StaticResource ResultBorderStyle}" />
 
         <!-- Maximum Plaintext Size -->
@@ -74,7 +69,6 @@
             <TextBlock Grid.Column="0" Style="{StaticResource ResultTextBlockStyle}" Text="Maximum Plaintext Size:" />
             <TextBlock Grid.Column="1" Style="{StaticResource ResultTextBlockStyle}" Text="{Binding MaxPlaintextSize, Converter={StaticResource BigIntToScientificNotationConverter}}" />
         </StackPanel>
-
         <Border Grid.ColumnSpan="2" Grid.Row="5" Style="{StaticResource ResultBorderStyle}" />
 
         <!-- Key Generation Time -->
@@ -82,7 +76,6 @@
             <TextBlock Grid.Column="0" Style="{StaticResource ResultTextBlockStyle}" Text="Key Generation Time:" />
             <TextBlock Grid.Column="1" Style="{StaticResource ResultTextBlockStyle}" Text="{Binding KeyGenerationTime, Converter={StaticResource MillisecondTimeToStringConverter}}" />
         </StackPanel>
-
         <Border Grid.ColumnSpan="2" Grid.Row="7" Style="{StaticResource ResultBorderStyle}" />
 
         <!-- Encryption Time -->
@@ -90,7 +83,6 @@
             <TextBlock Grid.Column="0" Style="{StaticResource ResultTextBlockStyle}" Text="Encryption Time:" />
             <TextBlock Grid.Column="1" Style="{StaticResource ResultTextBlockStyle}" Text="{Binding EncryptionTime, Converter={StaticResource MillisecondTimeToStringConverter}}" />
         </StackPanel>
-
         <Border Grid.ColumnSpan="2" Grid.Row="9" Style="{StaticResource ResultBorderStyle}" />
 
         <!-- Decryption Time -->
@@ -98,7 +90,6 @@
             <TextBlock Grid.Column="0" Style="{StaticResource ResultTextBlockStyle}" Text="Decryption Time:" />
             <TextBlock Grid.Column="1" Style="{StaticResource ResultTextBlockStyle}" Text="{Binding DecryptionTime, Converter={StaticResource MillisecondTimeToStringConverter}}" />
         </StackPanel>
-
         <Border Grid.ColumnSpan="2" Grid.Row="11" Style="{StaticResource ResultBorderStyle}" />
 
         <!-- Decryption Result -->
@@ -108,7 +99,6 @@
             <TextBlock Grid.Column="0" Style="{StaticResource ResultTextBlockStyle}" Text="Decrypted Sum:" Visibility="{Binding AdditionTime, Converter={StaticResource NullToVisibilityConverter}}"/>
             <TextBlock Grid.Column="1" Style="{StaticResource ResultTextBlockStyle}" Text="{Binding DecryptionResult}"/>
         </StackPanel>
-
         <Border Grid.ColumnSpan="2" Grid.Row="13" Style="{StaticResource ResultBorderStyle}" Visibility="{Binding AdditionTime, Converter={StaticResource NullToVisibilityConverter}}"/>
         
         <!-- Addition Time (shown only if addition was performed) -->
@@ -116,7 +106,6 @@
             <TextBlock Grid.Column="0" Style="{StaticResource ResultTextBlockStyle}" Text="Addition Time:" Visibility="{Binding AdditionTime, Converter={StaticResource NullToVisibilityConverter}}" />
             <TextBlock Grid.Column="1" Style="{StaticResource ResultTextBlockStyle}" Text="{Binding AdditionTime, Converter={StaticResource MillisecondTimeToStringConverter}}" Visibility="{Binding AdditionTime, Converter={StaticResource NullToVisibilityConverter}}" />
         </StackPanel>
-
         <Border Grid.ColumnSpan="2" Grid.Row="15" Style="{StaticResource ResultBorderStyle}"/>
 
         <!-- Intermediary Steps -->
@@ -137,4 +126,5 @@
             </ItemsControl>
         </StackPanel>
     </Grid>
+    <!--  #endregion -->
 </UserControl>

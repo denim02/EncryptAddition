@@ -14,9 +14,9 @@ namespace EncryptAddition.Analysis.Benchmarking
             get => _bitLength;
             set
             {
-                if (EncryptionType == EncryptionChoice.ELGAMAL && value < 3)
+                if (EncryptionType == EncryptionChoice.ElGamal && value < 3)
                     throw new ArgumentOutOfRangeException("primeBitLength", "The prime bit length must be 3 or greater for ElGamal.");
-                if (EncryptionType == EncryptionChoice.PAILLIER && value < 2)
+                if (EncryptionType == EncryptionChoice.Paillier && value < 2)
                     throw new ArgumentOutOfRangeException("primeBitLength", "The prime bit length must be 2 or greater for Paillier.");
 
                 _bitLength = value;

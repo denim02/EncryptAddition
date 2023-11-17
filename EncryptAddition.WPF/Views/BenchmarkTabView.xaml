@@ -12,6 +12,16 @@
 
     <!-- #region Resources -->
     <UserControl.Resources>
+        <!-- Converters -->
+        <converters:StringToBigIntegerArrayConverter x:Key="StringToBigIntegerArrayConverter"/>
+        <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
+        <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <converters:BenchmarkTupleToArrayConverter x:Key="BenchmarkTupleToArrayConverter"/>
+
+        <!-- Validation Rules -->
+        <validation:BitLengthRangeRule x:Key="BitLengthRangeRule"/>
+        <validation:InputValuesRule x:Key="InputValuesRule"/>
+
         <!-- Style rule that blocks button if validation errors have occured -->
         <Style TargetType="Button">
             <Style.Triggers>
@@ -24,17 +34,6 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
-
-        <!-- Converters -->
-        <converters:StringToBenchmarkChoiceConverter x:Key="StringToBenchmarkChoiceConverter"/>
-        <converters:StringToBigIntegerArrayConverter x:Key="StringToBigIntegerArrayConverter"/>
-        <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
-        <converters:BenchmarkTupleToArrayConverter x:Key="BenchmarkTupleToArrayConverter"/>
-        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
-
-        <!-- Validation Rules -->
-        <validation:BitLengthRangeRule x:Key="BitLengthRangeRule"/>
-        <validation:InputValuesRule x:Key="InputValuesRule"/>
     </UserControl.Resources>
     <!-- #endregion -->
 
@@ -51,7 +50,7 @@
             <StackPanel Grid.Column="0" Width="200" Margin="10">
                 
                 <!-- Bit Length Field -->
-                <Label Content="_Bit Length:" Target="{Binding ElementName=txtBitLength}"/>
+                <Label Content="_Bit Length:" Target="{Binding ElementName=txtPrimeBitLength}"/>
                 <TextBox Name="txtPrimeBitLength" Margin="5">
                     <TextBox.Text>
                         <Binding Path="BitLength" UpdateSourceTrigger="PropertyChanged" Mode="OneWayToSource">
@@ -70,7 +69,7 @@
                 </TextBox>
 
                 <!-- Input Values Field -->
-                <Label Content="_Input Values:" Target="{Binding ElementName=txtInputValues}"/>
+                <Label Content="_Input Values:" Target="{Binding ElementName=txtBenchmarkInputValues}"/>
                 <TextBox Name="txtBenchmarkInputValues" Margin="5">
                     <TextBox.Text>
                         <Binding Path="InputValues" UpdateSourceTrigger="PropertyChanged" Mode="OneWayToSource" Converter="{StaticResource StringToBigIntegerArrayConverter}">
@@ -91,6 +90,8 @@
                 <!-- Benchmark Choice Combobox-->
                 <Label Content="_Algorithm:" Target="{Binding ElementName=cbAlgorithm}"/>
                 <ComboBox Name="cbAlgorithm" ItemsSource="{Binding StrategyList}" SelectedItem="{Binding BenchmarkChoice, Mode=TwoWay}" />
+                
+                <!-- Run Button -->
                 <Button Name="btnRun" Content="_Run Benchmark" Command="{Binding ExecuteBenchmark}"/>
             </StackPanel>
         </Border>
@@ -129,7 +130,7 @@
         <!-- #endregion -->
         
         <!-- #region Overlay Grid for the Progress Bar and Status Message -->
-        <Grid Grid.Column="1" Visibility="{Binding IsBusy}">
+        <Grid Grid.Column="1" Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}">
             <!-- Semi-transparent overlay background -->
             <Rectangle Fill="#EEFFFFFF"/>
 

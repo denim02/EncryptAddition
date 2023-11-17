@@ -17,7 +17,7 @@ namespace EncryptAddition.WPF.DataTypes
 
         public EncryptionServiceResult(EncryptionChoice choice, OperationChoice operation, string serializedKeyPair, BigInteger maxPlaintextSize, Tuple<object, object>[] results)
         {
-            AlgorithmName = choice == EncryptionChoice.ELGAMAL ? "ElGamal" : "Paillier";
+            AlgorithmName = choice == EncryptionChoice.ElGamal ? "ElGamal" : "Paillier";
             Operation = operation == OperationChoice.ENCRYPTION ? "Encryption" : "Decryption";
             OperationChoice = operation;
             SerializedKeyPair = serializedKeyPair;
