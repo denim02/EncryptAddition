@@ -3,17 +3,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:EncryptAddition.WPF.Controls"
              xmlns:converters="clr-namespace:EncryptAddition.WPF.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
-        <converters:NullToCollapsedVisibilityConverter x:Key="NullToCollapsedVisibilityConverter" />
-        <converters:NotNullToCollapsedVisibilityConverter x:Key="NotNullToCollapsedVisibilityConverter" />
         <converters:CipherArrayWithoutLastValueConverter x:Key="CipherArrayWithoutLastValueConverter" />
         <converters:MillisecondTimeToStringConverter x:Key="MillisecondTimeToStringConverter" />
         <converters:BigIntToScientificNotationConverter x:Key="BigIntToScientificNotationConverter" />
         <converters:BigIntToHexadecConverter x:Key="BigIntToHexadecConverter" />
+        <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
 
         <Style TargetType="TextBlock" x:Key="ResultTextBlockStyle">
             <Setter Property="Margin" Value="5"/>
@@ -106,17 +104,17 @@
         <!-- Decryption Result -->
         <StackPanel Grid.Row="12" Orientation="Horizontal">
             <!-- Display "Decryption Result:" if addition was not performed or "Decrypted Sum:" otherwise. -->
-            <TextBlock Grid.Column="0" Style="{StaticResource ResultTextBlockStyle}" Text="Decryption Result:" Visibility="{Binding AdditionTime, Converter={StaticResource NotNullToCollapsedVisibilityConverter}}"/>
-            <TextBlock Grid.Column="0" Style="{StaticResource ResultTextBlockStyle}" Text="Decrypted Sum:" Visibility="{Binding AdditionTime, Converter={StaticResource NullToCollapsedVisibilityConverter}}"/>
+            <TextBlock Grid.Column="0" Style="{StaticResource ResultTextBlockStyle}" Text="Decryption Result:" Visibility="{Binding AdditionTime, Converter={StaticResource NullToVisibilityConverter}, ConverterParameter=NEGATE}"/>
+            <TextBlock Grid.Column="0" Style="{StaticResource ResultTextBlockStyle}" Text="Decrypted Sum:" Visibility="{Binding AdditionTime, Converter={StaticResource NullToVisibilityConverter}}"/>
             <TextBlock Grid.Column="1" Style="{StaticResource ResultTextBlockStyle}" Text="{Binding DecryptionResult}"/>
         </StackPanel>
 
-        <Border Grid.ColumnSpan="2" Grid.Row="13" Style="{StaticResource ResultBorderStyle}" Visibility="{Binding AdditionTime, Converter={StaticResource NullToCollapsedVisibilityConverter}}"/>
+        <Border Grid.ColumnSpan="2" Grid.Row="13" Style="{StaticResource ResultBorderStyle}" Visibility="{Binding AdditionTime, Converter={StaticResource NullToVisibilityConverter}}"/>
         
         <!-- Addition Time (shown only if addition was performed) -->
         <StackPanel Grid.Row="14" Orientation="Horizontal">
-            <TextBlock Grid.Column="0" Style="{StaticResource ResultTextBlockStyle}" Text="Addition Time:" Visibility="{Binding AdditionTime, Converter={StaticResource NullToCollapsedVisibilityConverter}}" />
-            <TextBlock Grid.Column="1" Style="{StaticResource ResultTextBlockStyle}" Text="{Binding AdditionTime, Converter={StaticResource MillisecondTimeToStringConverter}}" Visibility="{Binding AdditionTime, Converter={StaticResource NullToCollapsedVisibilityConverter}}" />
+            <TextBlock Grid.Column="0" Style="{StaticResource ResultTextBlockStyle}" Text="Addition Time:" Visibility="{Binding AdditionTime, Converter={StaticResource NullToVisibilityConverter}}" />
+            <TextBlock Grid.Column="1" Style="{StaticResource ResultTextBlockStyle}" Text="{Binding AdditionTime, Converter={StaticResource MillisecondTimeToStringConverter}}" Visibility="{Binding AdditionTime, Converter={StaticResource NullToVisibilityConverter}}" />
         </StackPanel>
 
         <Border Grid.ColumnSpan="2" Grid.Row="15" Style="{StaticResource ResultBorderStyle}"/>

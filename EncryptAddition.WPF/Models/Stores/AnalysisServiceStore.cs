@@ -15,7 +15,7 @@ namespace EncryptAddition.WPF.Models.Stores
         {
             _bitLength = primeBitLength;
             _choice = choice;
-            AsyncAnalysisAdapter = (choice == BenchmarkChoice.COMPARISON) ? new AsyncComparisonServiceAdapter(primeBitLength) : new AsyncSingleBenchmarkServiceAdapter(choice, primeBitLength);
+            AsyncAnalysisAdapter = (choice == BenchmarkChoice.Comparison) ? new AsyncComparisonServiceAdapter(primeBitLength) : new AsyncSingleBenchmarkServiceAdapter(choice, primeBitLength);
         }
 
         public static AnalysisServiceStore GetInstance(BenchmarkChoice choice, int primeBitLength)

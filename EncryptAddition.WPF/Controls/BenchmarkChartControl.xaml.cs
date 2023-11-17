@@ -48,7 +48,7 @@ namespace EncryptAddition.WPF.Controls
                     firstResult.DecryptionTime
                 };
 
-            var title = firstResult.AlgorithmName == "PAILLIER" ? "Paillier Benchmarks" : "ElGamal Benchmarks";
+            var title = firstResult.AlgorithmName == "Paillier" ? "Paillier Benchmarks" : "ElGamal Benchmarks";
 
             chartSeries.Add(new ColumnSeries
             {

@@ -1,0 +1,244 @@
+﻿<UserControl x:Class="EncryptAddition.WPF.Views.EncryptTabView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:EncryptAddition.WPF.Views"
+             xmlns:controls="clr-namespace:EncryptAddition.WPF.Controls"
+             xmlns:validation="clr-namespace:EncryptAddition.WPF.ViewModels.ValidationRules"
+             xmlns:converters="clr-namespace:EncryptAddition.WPF.Converters"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <converters:StringToEncryptionChoiceConverter x:Key="StringToEncryptionChoiceConverter"/>
+        <converters:NullToVisibilityConverter x:Key="NullToCollapsedVisibilityConverter"/>
+        <converters:StringToBigIntegerArrayConverter x:Key="StringToBigIntegerArrayConverter"/>
+        <converters:StringToCipherArrayConverter x:Key="StringToCipherArrayConverter"/>
+        <converters:OperationChoiceToVisibilityConverter x:Key="OperationChoiceToVisibilityConverter"/>
+        <converters:VisibilityToBooleanConverter x:Key="VisibilityToBooleanConverter"/>
+
+        <validation:SerializedCustomKeyRule x:Key="SerializedCustomKeyRule"/>
+        <validation:BitLengthRangeRule x:Key="BitLengthRangeRule"/>
+        <validation:InputValuesRule x:Key="InputValuesRule"/>
+        <validation:DecryptValuesRule x:Key="DecryptValuesRule"/>
+
+        <SolidColorBrush x:Key="SidebarBackgroundColor" Color="#FFFAFAFA"/>
+        <SolidColorBrush x:Key="MainAreaBackgroundColor" Color="#FFFFFFFF"/>
+        <SolidColorBrush x:Key="BorderColor" Color="#FFDDDDDD"/>
+        <SolidColorBrush x:Key="InputForeground" Color="#FF000000"/>
+        <SolidColorBrush x:Key="InputBackground" Color="#FFFFFFFF"/>
+        <Style TargetType="Label">
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Margin" Value="0,5,0,1"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="3"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderColor}"/>
+            <Setter Property="Foreground" Value="{StaticResource InputForeground}"/>
+            <Setter Property="Background" Value="{StaticResource InputBackground}"/>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="Padding" Value="3"/>
+            <Style.Triggers>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <!-- For BitLength Input Field -->
+                        <Condition Binding="{Binding ElementName=txtBitLength, Path=Visibility, Converter={StaticResource VisibilityToBooleanConverter}}" Value="True"/>
+                        <Condition Binding="{Binding ElementName=txtBitLength, Path=(Validation.HasError)}" Value="True"/>
+
+                        <!-- For Encrypt Input Values -->
+                        <Condition Binding="{Binding ElementName=txtEncryptInputValues, Path=Visibility, Converter={StaticResource VisibilityToBooleanConverter}}" Value="True"/>
+                        <Condition Binding="{Binding ElementName=txtEncryptInputValues, Path=(Validation.HasError)}" Value="True"/>
+                    </MultiDataTrigger.Conditions>
+                    <Setter Property="IsEnabled" Value="False"></Setter>
+                </MultiDataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="4"/>
+            <Setter Property="ItemContainerStyle">
+                <Setter.Value>
+                    <Style TargetType="ComboBoxItem">
+                        <Setter Property="Padding" Value="2"/>
+                        <Setter Property="FontFamily" Value="Segoe UI"/>
+                        <Setter Property="FontSize" Value="14"/>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="StatusMessageStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="Margin" Value="10"/>
+        </Style>
+        <Style TargetType="RadioButton">
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="4"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Sidebar Content -->
+        <Border Grid.Column="0" Background="{StaticResource SidebarBackgroundColor}" Margin="10" Padding="5" BorderBrush="{StaticResource BorderColor}" BorderThickness="1">
+            <StackPanel Grid.Column="0" Width="200" Margin="10">
+
+                <!-- Algorithm Choice -->
+                <Label Content="_Algorithm:" Target="{Binding ElementName=cbAlgorithm}"/>
+                <ComboBox Name="cbAlgorithm" ItemsSource="{Binding StrategyList}" SelectedItem="{Binding EncryptionChoice, Converter={StaticResource StringToEncryptionChoiceConverter}, Mode=TwoWay}" />
+                
+                <!-- Key Choice Section -->
+                <RadioButton x:Name="autoKeyRadioButton" Content="Auto-generated Key" GroupName="KeyChoice" Checked="KeyChoiceRadioButton_Checked"/>
+                <RadioButton x:Name="customKeyRadioButton" Content="Custom Key" GroupName="KeyChoice" Checked="KeyChoiceRadioButton_Checked"/>
+
+                <StackPanel x:Name="customKeyPanel" Visibility="{Binding IsKeyAutoGenerated, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=NEGATE}">
+                    <Label Content="_Enter Key:" Target="{Binding ElementName=txtCustomKey}"/>
+                    <TextBox x:Name="txtCustomKey">
+                        <TextBox.Text>
+                            <Binding Path="SerializedCustomKey" UpdateSourceTrigger="PropertyChanged" Mode="OneWayToSource">
+                                <Binding.ValidationRules>
+                                    <validation:SerializedCustomKeyRule />
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                        <TextBox.ToolTip>
+                            <ToolTip DataContext="{Binding RelativeSource={RelativeSource Self}, Path=PlacementTarget}">
+                                <TextBlock Text="{Binding (Validation.Errors).CurrentItem.ErrorContent, 
+                                  FallbackValue='No errors.', 
+                                  TargetNullValue='No errors.'}"/>
+                            </ToolTip>
+                        </TextBox.ToolTip>
+                    </TextBox>
+                </StackPanel>
+
+                <StackPanel x:Name="bitLengthPanel" Visibility="{Binding IsKeyAutoGenerated, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <Label Content="_Bit Length:" Target="{Binding ElementName=txtBitLength}"/>
+                    <TextBox Name="txtBitLength" Margin="5">
+                        <TextBox.Text>
+                            <Binding Path="BitLength" UpdateSourceTrigger="PropertyChanged" Mode="OneWayToSource">
+                                <Binding.ValidationRules>
+                                    <validation:BitLengthRangeRule/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                        <TextBox.ToolTip>
+                            <ToolTip DataContext="{Binding RelativeSource={RelativeSource Self}, Path=PlacementTarget}">
+                                <TextBlock Text="{Binding (Validation.Errors).CurrentItem.ErrorContent, 
+                                  FallbackValue='No errors.', 
+                                  TargetNullValue='No errors.'}"/>
+                            </ToolTip>
+                        </TextBox.ToolTip>
+                    </TextBox>
+                </StackPanel>
+                <!-- END KEY SELECTION -->
+                
+                <!-- Operation Selection -->
+                <RadioButton x:Name="encryptRadioButton" Content="Encryption" GroupName="OperationChoice" Checked="OperationChoiceRadioButton_Checked"/>
+                <RadioButton x:Name="decryptRadioButton" Content="Decryption" GroupName="OperationChoice" Checked="OperationChoiceRadioButton_Checked" IsEnabled="{Binding CanDecrypt}"/>
+                <!-- END OPERATION SELECTION -->
+                
+                <!-- Input Values field -->
+                <StackPanel Visibility="{Binding OperationChoice, Converter={StaticResource OperationChoiceToVisibilityConverter},ConverterParameter=ENCRYPTION}">
+                    <Label Content="_Input Values" Target="{Binding ElementName=txtEncryptInputValues}"/>
+                    <!-- Textbox shown for encryption -->
+                    <TextBox Name="txtEncryptInputValues" Margin="5">
+                        <TextBox.Text>
+                            <Binding Path="EncryptionInputValues" UpdateSourceTrigger="PropertyChanged" Mode="OneWayToSource" Converter="{StaticResource StringToBigIntegerArrayConverter}">
+                                <Binding.ValidationRules>
+                                    <validation:InputValuesRule/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                        <TextBox.ToolTip>
+                            <ToolTip DataContext="{Binding RelativeSource={RelativeSource Self}, Path=PlacementTarget}">
+                                <TextBlock Text="{Binding (Validation.Errors).CurrentItem.ErrorContent, 
+                                  FallbackValue='No errors.', 
+                                  TargetNullValue='No errors.'}"/>
+                            </ToolTip>
+                        </TextBox.ToolTip>
+                    </TextBox>
+                </StackPanel>
+                <StackPanel Visibility="{Binding OperationChoice, Converter={StaticResource OperationChoiceToVisibilityConverter},ConverterParameter=DECRYPTION}">
+                    <Label Content="_Input Values" Target="{Binding ElementName=txtDecryptInputValues}"/>
+                    <!-- Textbox shown for encryption -->
+                    <TextBox Name="txtDecryptInputValues" Margin="5">
+                        <TextBox.Text>
+                            <Binding Path="DecryptionInputValues" UpdateSourceTrigger="PropertyChanged" Mode="OneWayToSource" Converter="{StaticResource StringToCipherArrayConverter}">
+                                <Binding.ValidationRules>
+                                    <validation:DecryptValuesRule/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                        <TextBox.ToolTip>
+                            <ToolTip DataContext="{Binding RelativeSource={RelativeSource Self}, Path=PlacementTarget}">
+                                <TextBlock Text="{Binding (Validation.Errors).CurrentItem.ErrorContent, 
+                                  FallbackValue='No errors.', 
+                                  TargetNullValue='No errors.'}"/>
+                            </ToolTip>
+                        </TextBox.ToolTip>
+                    </TextBox>
+                </StackPanel>
+                <!-- END INPUT VALUES FIELD -->
+
+                <Button Name="btnRun" Content="_Run Operation" Command="{Binding ExecuteOperation}"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Main Content Area -->
+        <Border Grid.Column="1" BorderBrush="{StaticResource BorderColor}" BorderThickness="1" Padding="10">
+            <Grid Grid.Column="1" Visibility="{Binding Result, Converter={StaticResource NullToCollapsedVisibilityConverter}}">
+                <controls:EncryptionServiceResultControl DataContext="{Binding Result}"/>
+            </Grid>
+        </Border>
+
+        <!-- Overlay Grid for the Progress Bar and Status Message -->
+        <Grid Grid.Column="1" Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}}">
+            <!-- Semi-transparent overlay background -->
+            <Rectangle Fill="#EEFFFFFF"/>
+
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <!-- Progress Bar -->
+                <ProgressBar IsIndeterminate="True" Width="100" Height="40"/>
+
+                <!-- Status Message -->
+                <TextBlock>
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock" BasedOn="{StaticResource StatusMessageStyle}">
+                            <Setter Property="Text" Value="Waiting for operation..."/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsPreparingService}" Value="True">
+                                    <Setter Property="Text" Value="Preparing encryption service"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsRunningOperation}" Value="True">
+                                    <Setter Property="Text" Value="Performing operation..."/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

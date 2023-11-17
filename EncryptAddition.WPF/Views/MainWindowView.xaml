@@ -8,16 +8,13 @@
     <Grid>
         <TabControl>
             <!-- First Tab: Benchmark Tab -->
-            <TabItem Header="Benchmark">
+            <TabItem Header="Benchmarking">
                 <local:BenchmarkTabView />
             </TabItem>
 
-            <!-- Second Tab: [Assumed Name and Content] -->
-            <TabItem Header="Second Tab" Margin="-2,0,-2,0">
-                <Grid>
-                    <!-- Content for the Second Tab -->
-                    <!-- This can be structured similarly to the first tab or customized as per your requirement -->
-                </Grid>
+            <!-- Second Tab: Encrypt/Decrypt Tab -->
+            <TabItem Header="Encrypt/Decrypt" Margin="-2,0,-2,0">
+                <local:EncryptTabView />
             </TabItem>
         </TabControl>
     </Grid>

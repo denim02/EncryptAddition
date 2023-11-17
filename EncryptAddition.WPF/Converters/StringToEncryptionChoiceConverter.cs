@@ -1,24 +1,22 @@
-﻿using EncryptAddition.WPF.DataTypes;
+﻿using EncryptAddition.Crypto;
 using System;
 using System.Globalization;
 using System.Windows.Data;
 
 namespace EncryptAddition.WPF.Converters
 {
-    public class StringToBenchmarkChoiceConverter : IValueConverter
+    public class StringToEncryptionChoiceConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is BenchmarkChoice choice)
+            if (value is EncryptionChoice choice)
             {
                 switch (choice)
                 {
-                    case BenchmarkChoice.PAILLIER:
+                    case EncryptionChoice.PAILLIER:
                         return "Paillier";
-                    case BenchmarkChoice.ELGAMAL:
+                    case EncryptionChoice.ELGAMAL:
                         return "ElGamal";
-                    case BenchmarkChoice.COMPARISON:
-                        return "Comparison";
                     default:
                         return null;
                 }
@@ -33,11 +31,9 @@ namespace EncryptAddition.WPF.Converters
                 switch (content)
                 {
                     case "Paillier":
-                        return BenchmarkChoice.PAILLIER;
+                        return EncryptionChoice.PAILLIER;
                     case "ElGamal":
-                        return BenchmarkChoice.ELGAMAL;
-                    case "Comparison":
-                        return BenchmarkChoice.COMPARISON;
+                        return EncryptionChoice.ELGAMAL;
                     default:
                         return null;
                 }

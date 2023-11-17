@@ -4,6 +4,7 @@
              xmlns:local="clr-namespace:EncryptAddition.WPF"
              StartupUri="Views/MainWindowView.xaml">
     <Application.Resources>
-         
+        <!-- Including shared styles -->
+        <ResourceDictionary Source="Views/Styles.xaml"/>
     </Application.Resources>
 </Application>

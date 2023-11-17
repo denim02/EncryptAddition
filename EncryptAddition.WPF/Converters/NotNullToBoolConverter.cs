@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Globalization;
-using System.Windows;
 using System.Windows.Data;
 
 namespace EncryptAddition.WPF.Converters
 {
-    public class NotNullToCollapsedVisibilityConverter : IValueConverter
+    public class NotNullToBoolConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value == null ? Visibility.Visible : Visibility.Collapsed;
+            return value == null ? false : true;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

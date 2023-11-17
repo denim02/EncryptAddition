@@ -2,8 +2,8 @@
 {
     public enum BenchmarkChoice
     {
-        ELGAMAL,
-        PAILLIER,
-        COMPARISON
+        ElGamal,
+        Paillier,
+        Comparison
     }
 }

@@ -37,9 +37,9 @@ namespace EncryptAddition.WPF.Models.Services
         {
             switch (choice)
             {
-                case BenchmarkChoice.PAILLIER:
+                case BenchmarkChoice.Paillier:
                     return EncryptionChoice.PAILLIER;
-                case BenchmarkChoice.ELGAMAL:
+                case BenchmarkChoice.ElGamal:
                     return EncryptionChoice.ELGAMAL;
                 default:
                     throw new ArgumentException("Invalid choice.");

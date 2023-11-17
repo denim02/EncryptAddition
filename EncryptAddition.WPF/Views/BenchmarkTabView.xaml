@@ -9,87 +9,50 @@
              xmlns:validation="clr-namespace:EncryptAddition.WPF.ViewModels.ValidationRules"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    
+
+    <!-- #region Resources -->
     <UserControl.Resources>
-        <SolidColorBrush x:Key="SidebarBackgroundColor" Color="#FFFAFAFA"/>
-        <SolidColorBrush x:Key="MainAreaBackgroundColor" Color="#FFFFFFFF"/>
-        <SolidColorBrush x:Key="BorderColor" Color="#FFDDDDDD"/>
-        <SolidColorBrush x:Key="InputForeground" Color="#FF000000"/>
-        <SolidColorBrush x:Key="InputBackground" Color="#FFFFFFFF"/>
-        <Style TargetType="Label">
-            <Setter Property="FontFamily" Value="Segoe UI"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Margin" Value="0,5,0,1"/>
-        </Style>
-        <Style TargetType="TextBox">
-            <Setter Property="FontFamily" Value="Segoe UI"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="Padding" Value="3"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="BorderBrush" Value="{StaticResource BorderColor}"/>
-            <Setter Property="Foreground" Value="{StaticResource InputForeground}"/>
-            <Setter Property="Background" Value="{StaticResource InputBackground}"/>
-        </Style>
+        <!-- Style rule that blocks button if validation errors have occured -->
         <Style TargetType="Button">
-            <Setter Property="FontFamily" Value="Segoe UI"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Margin" Value="10"/>
-            <Setter Property="Padding" Value="3"/>
             <Style.Triggers>
-                <DataTrigger Binding="{Binding ElementName=txtBitLength, Path=(Validation.HasError)}" Value="True">
+                <DataTrigger Binding="{Binding ElementName=txtPrimeBitLength, Path=(Validation.HasError)}" Value="True">
                     <Setter Property="IsEnabled" Value="False"></Setter>
                 </DataTrigger>
 
-                <DataTrigger Binding="{Binding ElementName=txtInputValues, Path=(Validation.HasError)}" Value="True">
+                <DataTrigger Binding="{Binding ElementName=txtBenchmarkInputValues, Path=(Validation.HasError)}" Value="True">
                     <Setter Property="IsEnabled" Value="False"></Setter>
                 </DataTrigger>
             </Style.Triggers>
         </Style>
-        <Style TargetType="ComboBox">
-            <Setter Property="FontFamily" Value="Segoe UI"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="Padding" Value="4"/>
-            <Setter Property="ItemContainerStyle">
-                <Setter.Value>
-                    <Style TargetType="ComboBoxItem">
-                        <Setter Property="Padding" Value="2"/>
-                        <Setter Property="FontFamily" Value="Segoe UI"/>
-                        <Setter Property="FontSize" Value="14"/>
-                    </Style>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style x:Key="StatusMessageStyle" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="FontFamily" Value="Segoe UI"/>
-            <Setter Property="Margin" Value="10"/>
-        </Style>
 
+        <!-- Converters -->
         <converters:StringToBenchmarkChoiceConverter x:Key="StringToBenchmarkChoiceConverter"/>
         <converters:StringToBigIntegerArrayConverter x:Key="StringToBigIntegerArrayConverter"/>
-        <converters:NullToCollapsedVisibilityConverter x:Key="NullToCollapsedVisibilityConverter"/>
-        <converters:NotNullToCollapsedVisibilityConverter x:Key="NotNullToCollapsedVisibilityConverter"/>
+        <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
         <converters:BenchmarkTupleToArrayConverter x:Key="BenchmarkTupleToArrayConverter"/>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
 
+        <!-- Validation Rules -->
         <validation:BitLengthRangeRule x:Key="BitLengthRangeRule"/>
         <validation:InputValuesRule x:Key="InputValuesRule"/>
     </UserControl.Resources>
+    <!-- #endregion -->
 
+     
     <Grid Background="{StaticResource MainAreaBackgroundColor}">
-        <!-- Sidebar for Inputs -->
+        <!-- Grid definition for entire tab -->
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <!-- Sidebar Content -->
+        <!-- #region Sidebar -->
         <Border Grid.Column="0" Background="{StaticResource SidebarBackgroundColor}" Margin="10" Padding="5" BorderBrush="{StaticResource BorderColor}" BorderThickness="1">
             <StackPanel Grid.Column="0" Width="200" Margin="10">
+                
+                <!-- Bit Length Field -->
                 <Label Content="_Bit Length:" Target="{Binding ElementName=txtBitLength}"/>
-                <TextBox Name="txtBitLength" Margin="5">
+                <TextBox Name="txtPrimeBitLength" Margin="5">
                     <TextBox.Text>
                         <Binding Path="BitLength" UpdateSourceTrigger="PropertyChanged" Mode="OneWayToSource">
                             <Binding.ValidationRules>
@@ -106,8 +69,9 @@
                     </TextBox.ToolTip>
                 </TextBox>
 
+                <!-- Input Values Field -->
                 <Label Content="_Input Values:" Target="{Binding ElementName=txtInputValues}"/>
-                <TextBox Name="txtInputValues" Margin="5">
+                <TextBox Name="txtBenchmarkInputValues" Margin="5">
                     <TextBox.Text>
                         <Binding Path="InputValues" UpdateSourceTrigger="PropertyChanged" Mode="OneWayToSource" Converter="{StaticResource StringToBigIntegerArrayConverter}">
                             <Binding.ValidationRules>
@@ -124,42 +88,48 @@
                     </TextBox.ToolTip>
                 </TextBox>
 
+                <!-- Benchmark Choice Combobox-->
                 <Label Content="_Algorithm:" Target="{Binding ElementName=cbAlgorithm}"/>
-                <ComboBox Name="cbAlgorithm" ItemsSource="{Binding StrategyList}" SelectedItem="{Binding BenchmarkChoice, Converter={StaticResource StringToBenchmarkChoiceConverter}, Mode=TwoWay}" />
+                <ComboBox Name="cbAlgorithm" ItemsSource="{Binding StrategyList}" SelectedItem="{Binding BenchmarkChoice, Mode=TwoWay}" />
                 <Button Name="btnRun" Content="_Run Benchmark" Command="{Binding ExecuteBenchmark}"/>
             </StackPanel>
         </Border>
+        <!-- #endregion -->
 
-        <!-- Main Content Area -->
+        <!-- #region Main Content Area -->
         <Border Grid.Column="1" BorderBrush="{StaticResource BorderColor}" BorderThickness="1" Padding="10">
             <Grid Grid.Column="1">
 
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
                     <!-- This row will contain the table with results -->
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    
                     <!-- This row will contain the chart -->
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <Grid Visibility="{Binding BenchmarkResults, Converter={StaticResource NullToCollapsedVisibilityConverter}}">
+                <!-- Benchmark Results -->
+                <Grid Visibility="{Binding BenchmarkResults, Converter={StaticResource NullToVisibilityConverter}}">
 
                     <!-- Used to display the results of only one algorithm benchmark -->
-                    <ScrollViewer Grid.Row="0"  Margin="10" Visibility="{Binding BenchmarkResults.Item2, Converter={StaticResource NotNullToCollapsedVisibilityConverter}}" HorizontalScrollBarVisibility="Disabled">
+                    <ScrollViewer Grid.Row="0"  Margin="10" Visibility="{Binding BenchmarkResults.Item2, Converter={StaticResource NullToVisibilityConverter}, ConverterParameter=NEGATE}" HorizontalScrollBarVisibility="Disabled">
                         <controls:BenchmarkResultControl DataContext="{Binding BenchmarkResults.Item1}"/>
                     </ScrollViewer>
 
                     <!-- Used to display comparison results -->
-                    <ScrollViewer Grid.Row="0"  Margin="10" Visibility="{Binding BenchmarkResults.Item2, Converter={StaticResource NullToCollapsedVisibilityConverter}}" HorizontalScrollBarVisibility="Disabled">
-                        <controls:ComparisonResultControl BenchmarkResults="{Binding BenchmarkResults}" Visibility="{Binding BenchmarkResults.Item2, Converter={StaticResource NullToCollapsedVisibilityConverter}}"/>
+                    <ScrollViewer Grid.Row="0"  Margin="10" Visibility="{Binding BenchmarkResults.Item2, Converter={StaticResource NullToVisibilityConverter}}" HorizontalScrollBarVisibility="Disabled">
+                        <controls:ComparisonResultControl BenchmarkResults="{Binding BenchmarkResults}"/>
                     </ScrollViewer>
                 </Grid>
 
-                <controls:BenchmarkChartControl Margin="10" Grid.Row="1" VerticalAlignment="Bottom" Height="200" ChartData="{Binding BenchmarkResults}" Visibility="{Binding BenchmarkResults, Converter={StaticResource NullToCollapsedVisibilityConverter}}"/>
+                <!-- Chart -->
+                <controls:BenchmarkChartControl Margin="10" Grid.Row="1" VerticalAlignment="Bottom" Height="200" ChartData="{Binding BenchmarkResults}" Visibility="{Binding BenchmarkResults, Converter={StaticResource NullToVisibilityConverter}}"/>
             </Grid>
         </Border>
+        <!-- #endregion -->
         
-        <!-- Overlay Grid for the Progress Bar and Status Message -->
-        <Grid Grid.Column="1" Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}}">
+        <!-- #region Overlay Grid for the Progress Bar and Status Message -->
+        <Grid Grid.Column="1" Visibility="{Binding IsBusy}">
             <!-- Semi-transparent overlay background -->
             <Rectangle Fill="#EEFFFFFF"/>
 
@@ -185,5 +155,6 @@
                 </TextBlock>
             </StackPanel>
         </Grid>
+        <!-- #endregion -->
     </Grid>
 </UserControl>
