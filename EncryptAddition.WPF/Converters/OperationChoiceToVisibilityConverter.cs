@@ -10,31 +10,17 @@ namespace EncryptAddition.WPF.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value == null)
-                return Visibility.Collapsed;
-
-            if (value is OperationChoice choice)
+            if (value is OperationChoice choice && parameter is string operation)
             {
-                if (parameter == null)
-                    return Visibility.Collapsed;
-                if (parameter is string operation)
-                {
-                    if (choice == OperationChoice.ENCRYPTION && operation == "ENCRYPTION")
-                        return Visibility.Visible;
-                    else if (choice == OperationChoice.DECRYPTION && operation == "DECRYPTION")
-                        return Visibility.Visible;
-                    else
-                        return Visibility.Collapsed;
-                }
+                if (choice == OperationChoice.ENCRYPTION && operation == "ENCRYPTION")
+                    return Visibility.Visible;
+                else if (choice == OperationChoice.DECRYPTION && operation == "DECRYPTION")
+                    return Visibility.Visible;
                 else
-                {
                     return Visibility.Collapsed;
-                }
             }
-            else
-            {
-                return Visibility.Collapsed;
-            }
+
+            return value;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

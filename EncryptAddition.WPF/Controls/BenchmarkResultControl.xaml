@@ -15,10 +15,10 @@
                 <ResourceDictionary Source="ResultStyles.xaml"/>
                 <ResourceDictionary>
                     <!-- Converters -->
-                    <converters:CipherArrayWithoutLastValueConverter x:Key="CipherArrayWithoutLastValueConverter" />
                     <converters:MillisecondTimeToStringConverter x:Key="MillisecondTimeToStringConverter" />
                     <converters:BigIntToScientificNotationConverter x:Key="BigIntToScientificNotationConverter" />
                     <converters:BigIntToHexadecConverter x:Key="BigIntToHexadecConverter" />
+                    
                     <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
@@ -111,7 +111,7 @@
         <!-- Intermediary Steps -->
         <StackPanel Grid.Row="16">
             <TextBlock Grid.Column="0" Style="{StaticResource ResultTextBlockStyle}" Text="Generated Ciphers:" />
-            <ItemsControl ItemsSource="{Binding IntermediarySteps, Converter={StaticResource CipherArrayWithoutLastValueConverter}}">
+            <ItemsControl ItemsSource="{Binding IntermediarySteps}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Vertical">
@@ -124,6 +124,7 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
+            <TextBlock Grid.Column="0" Style="{StaticResource ResultTextBlockStyle}" Text="The last cipher value is the cipher for the sum." Visibility="{Binding AdditionTime, Converter={StaticResource NullToVisibilityConverter}}"/>
         </StackPanel>
     </Grid>
     <!--  #endregion -->

@@ -12,17 +12,10 @@ namespace EncryptAddition.WPF.Converters
             if (value is BigInteger bigInt)
             {
                 // If greater than 9 digits, write in hexadecimal notation
-                if (bigInt.ToString().Length > 9)
-                {
-                    return $"{bigInt:X}";
-                }
-                else
-                {
-                    return bigInt.ToString();
-                }
+                return bigInt.ToString().Length > 9 ? $"{bigInt:X}" : bigInt.ToString();
             }
 
-            return null;
+            return value;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

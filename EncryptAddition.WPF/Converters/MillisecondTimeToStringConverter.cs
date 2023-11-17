@@ -11,17 +11,10 @@ namespace EncryptAddition.WPF.Converters
             if (value is double time)
             {
                 // Process time (in case it is greater than 1000ms, express in seconds)
-                if (time > 1000)
-                {
-                    return $"{time / 1000:0.00000} s";
-                }
-                else
-                {
-                    return $"{time:0.00000} ms";
-                }
+                return time > 1000 ? $"{time / 1000:0.00000} s" : $"{time:0.00000} ms";
             }
 
-            return null;
+            return value;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

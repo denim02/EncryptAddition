@@ -15,12 +15,11 @@
                 <ResourceDictionary Source="ResultStyles.xaml"/>
                 <!-- Converters -->
                 <ResourceDictionary>
-                    <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
-                    <converters:CipherArrayWithoutLastValueConverter x:Key="CipherArrayWithoutLastValueConverter" />
-                    <converters:MillisecondTimeToStringConverter x:Key="MillisecondTimeToStringConverter" />
                     <converters:BigIntToScientificNotationConverter x:Key="BigIntToScientificNotationConverter" />
-                    <converters:BigIntToHexadecConverter x:Key="BigIntToHexadecConverter" />
+
+                    <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
                     <converters:OperationChoiceToVisibilityConverter x:Key="OperationChoiceToVisibilityConverter"/>
+                    
                     <converters:DecryptionResultsConverter x:Key="DecryptionResultsConverter"/>
                     <converters:EncryptionResultsConverter x:Key="EncryptionResultsConverter"/>
                 </ResourceDictionary>
@@ -62,7 +61,7 @@
         <!-- Max Plaintext Size Name -->
         <StackPanel Grid.Row="4" Orientation="Horizontal">
             <TextBlock Grid.Column="0" Text="Maximum Plaintext Size:" Style="{StaticResource ResultTextBlockStyle}"/>
-            <TextBox Background="Transparent" Style="{StaticResource ResultTextBoxStyle}" BorderThickness="0" Grid.Column="1" Text="{Binding MaxPlaintextSize, Mode=OneWay}" IsReadOnly="True" TextWrapping="Wrap"/>
+            <TextBox Background="Transparent" Style="{StaticResource ResultTextBoxStyle}" BorderThickness="0" Grid.Column="1" Text="{Binding MaxPlaintextSize, Mode=OneWay,Converter={StaticResource BigIntToScientificNotationConverter}}" IsReadOnly="True" TextWrapping="Wrap"/>
         </StackPanel>
         <Border Grid.ColumnSpan="2" Grid.Row="5" Style="{StaticResource ResultBorderStyle}" />
 

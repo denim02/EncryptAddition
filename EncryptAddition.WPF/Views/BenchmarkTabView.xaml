@@ -14,16 +14,16 @@
     <UserControl.Resources>
         <!-- Converters -->
         <converters:StringToBigIntegerArrayConverter x:Key="StringToBigIntegerArrayConverter"/>
+        
         <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
         <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-        <converters:BenchmarkTupleToArrayConverter x:Key="BenchmarkTupleToArrayConverter"/>
 
         <!-- Validation Rules -->
         <validation:BitLengthRangeRule x:Key="BitLengthRangeRule"/>
         <validation:InputValuesRule x:Key="InputValuesRule"/>
 
         <!-- Style rule that blocks button if validation errors have occured -->
-        <Style TargetType="Button">
+        <Style TargetType="Button" BasedOn="{StaticResource RunButtonStyle}">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding ElementName=txtPrimeBitLength, Path=(Validation.HasError)}" Value="True">
                     <Setter Property="IsEnabled" Value="False"></Setter>

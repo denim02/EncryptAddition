@@ -12,11 +12,12 @@
     <!-- #region Resources -->
     <UserControl.Resources>
         <!-- Converters -->
-        <converters:StringToEncryptionChoiceConverter x:Key="StringToEncryptionChoiceConverter"/>
         <converters:StringToBigIntegerArrayConverter x:Key="StringToBigIntegerArrayConverter"/>
         <converters:StringToCipherArrayConverter x:Key="StringToCipherArrayConverter"/>
-        <converters:OperationChoiceToVisibilityConverter x:Key="OperationChoiceToVisibilityConverter"/>
+        
         <converters:VisibilityToBooleanConverter x:Key="VisibilityToBooleanConverter"/>
+        
+        <converters:OperationChoiceToVisibilityConverter x:Key="OperationChoiceToVisibilityConverter"/>
         <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
 
@@ -27,11 +28,7 @@
         <validation:DecryptValuesRule x:Key="DecryptValuesRule"/>
 
         <!-- Style rule that blocks button if validation errors have occured -->
-        <Style TargetType="Button">
-            <Setter Property="FontFamily" Value="Segoe UI"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Margin" Value="10"/>
-            <Setter Property="Padding" Value="3"/>
+        <Style TargetType="Button" BasedOn="{StaticResource RunButtonStyle}">
             <Style.Triggers>
                 <MultiDataTrigger>
                     <MultiDataTrigger.Conditions>

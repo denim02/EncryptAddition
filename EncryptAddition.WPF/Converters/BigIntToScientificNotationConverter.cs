@@ -12,17 +12,10 @@ namespace EncryptAddition.WPF.Converters
             if (value is BigInteger bigInt)
             {
                 // If greater than 9 digits, write in scientific notation, cap to 4 decimal places
-                if (bigInt.ToString().Length > 9)
-                {
-                    return $"{bigInt:0.0000e+0}";
-                }
-                else
-                {
-                    return $"{bigInt}";
-                }
+                return bigInt.ToString().Length > 9 ? $"{bigInt:0.0000e+0}" : $"{bigInt}";
             }
 
-            return null;
+            return value;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
