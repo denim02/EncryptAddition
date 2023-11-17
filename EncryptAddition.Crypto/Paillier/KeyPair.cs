@@ -9,7 +9,7 @@ namespace EncryptAddition.Crypto.Paillier
     public class KeyPair : IKeyPair
     {
         // Define the proper validation format for deserialization
-        private readonly static Regex correctFormat = new(@"^\d+\|\d+;\d+\|\d+$");
+        private readonly static Regex _correctFormat = new(@"^\d+\|\d+;\d+\|\d+$");
 
         // Properties to hold the private and public keys
         public PublicKey PublicKey { get; }
@@ -54,7 +54,7 @@ namespace EncryptAddition.Crypto.Paillier
         public static KeyPair Deserialize(string serializedKeys)
         {
             // Check for proper format with RegEx
-            if (!correctFormat.IsMatch(serializedKeys))
+            if (!ValidateSerializedKeys(serializedKeys))
                 throw new ArgumentException("The provided keys are in an incorrect format.", nameof(serializedKeys));
 
             string[] seperatedKeys = serializedKeys.Split(';');
@@ -66,6 +66,16 @@ namespace EncryptAddition.Crypto.Paillier
                 new PublicKey(publicKeyProperties[0], publicKeyProperties[1]),
                 new PrivateKey(privateKeyProperties[0], privateKeyProperties[1])
                 );
+        }
+
+        /// <summary>
+        /// Checks if the provided string matches the expected format for serialized Paillier keys.
+        /// </summary>
+        /// <param name="serializedKeys">The serialized KeyPair keys.</param>
+        /// <returns>A boolean result.</returns>
+        public static bool ValidateSerializedKeys(string serializedKeys)
+        {
+            return _correctFormat.IsMatch(serializedKeys);
         }
     }
 
