@@ -77,18 +77,19 @@ namespace EncryptAddition.WPF.ViewModels
                 OnPropertyChanged(nameof(IsDataValid));
             }
         }
-        // Custom Key validation logic
-        private readonly Regex _customKeyFormat = new Regex(@"^\d+\|\d+\|\d+;\d+$|^\d+\|\d+;\d+\|\d+$");
+        // Custom Key validation logic (based on chosen algorithm)
         private (bool IsValid, IEnumerable<string> ErrorMessages) IsCustomKeyValid(string value)
         {
             // Check if the field is empty
             if (String.IsNullOrWhiteSpace(value))
                 return (false, new[] { "The custom key field is required." });
 
-            if (_customKeyFormat.IsMatch(value))
+            if ((EncryptionChoice == EncryptionChoice.ElGamal) ?
+                Crypto.ElGamal.KeyPair.ValidateSerializedKeys(value) :
+                Crypto.Paillier.KeyPair.ValidateSerializedKeys(value))
                 return (true, Enumerable.Empty<string>());
             else
-                return (false, new[] { "Invalid custom key pair format." });
+                return (false, new[] { "Invalid custom key pair format. A " + EncryptionChoice + " key pair must have the format: " + (EncryptionChoice == EncryptionChoice.Paillier ? "111|123;123|123." : "111|123|123;123.") });
         }
 
         // Algorithm Choice combobox field
@@ -100,6 +101,7 @@ namespace EncryptAddition.WPF.ViewModels
             {
                 _encryptionChoice = value;
                 OnPropertyChanged();
+                _isSerializedCustomKeyValid = IsPropertyValid(SerializedCustomKey, IsCustomKeyValid, nameof(SerializedCustomKey));
                 OnPropertyChanged(nameof(IsDataValid));
             }
         }
