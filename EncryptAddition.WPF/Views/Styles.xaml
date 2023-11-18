@@ -24,7 +24,7 @@
         <Setter Property="Foreground" Value="{StaticResource InputForeground}"/>
         <Setter Property="Background" Value="{StaticResource InputBackground}"/>
     </Style>
-    <Style TargetType="Button" x:Key="RunButtonStyle">
+    <Style TargetType="Button">
         <Setter Property="FontFamily" Value="Segoe UI"/>
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="Margin" Value="10"/>
@@ -53,5 +53,24 @@
         <Setter Property="FontFamily" Value="Segoe UI"/>
         <Setter Property="Margin" Value="10"/>
     </Style>
-     <!-- #endregion -->
+    <!-- Style rule for validation error tooltips -->
+    <Style x:Key="InputTextBox" TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+        <Setter Property="ToolTip">
+            <Setter.Value>
+                <ToolTip DataContext="{Binding RelativeSource={RelativeSource Self}, Path=PlacementTarget}">
+                    <TextBlock Text="{Binding (Validation.Errors)/ErrorContent, 
+                              FallbackValue='No errors.', TargetNullValue='No errors.'}" />
+                </ToolTip>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!-- Style rule that blocks button if validation errors have occured, depends on IsDataValid property -->
+    <Style x:Key="RunButtonStyle" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsDataValid}" Value="False">
+                <Setter Property="IsEnabled" Value="False"></Setter>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+    <!-- #endregion -->
 </ResourceDictionary>

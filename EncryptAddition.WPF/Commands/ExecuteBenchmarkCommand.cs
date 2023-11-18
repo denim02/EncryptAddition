@@ -21,7 +21,7 @@ namespace EncryptAddition.WPF.Commands
 
             try
             {
-                var analysisServiceStore = AnalysisServiceStore.GetInstance(_benchmarkTabViewModel.BenchmarkChoice, _benchmarkTabViewModel.BitLength);
+                var analysisServiceStore = AnalysisServiceStore.GetInstance(_benchmarkTabViewModel.BenchmarkChoice, int.Parse(_benchmarkTabViewModel.BenchmarkBitLength));
                 IAsyncAnalysisAdapter analysisAdapter = analysisServiceStore.AsyncAnalysisAdapter;
 
                 if (!analysisAdapter.IsReady)
@@ -30,7 +30,7 @@ namespace EncryptAddition.WPF.Commands
                 _benchmarkTabViewModel.IsPreparingBenchmark = false;
                 _benchmarkTabViewModel.IsBenchmarking = true;
 
-                var results = await analysisAdapter.RunAnalysis(_benchmarkTabViewModel.InputValues);
+                var results = await analysisAdapter.RunAnalysis(Utils.ParseStringToBigInteger(_benchmarkTabViewModel.InputValues));
 
                 _benchmarkTabViewModel.IsBenchmarking = false;
                 _benchmarkTabViewModel.BenchmarkResults = results;
@@ -40,6 +40,5 @@ namespace EncryptAddition.WPF.Commands
                 throw;
             }
         }
-
     }
 }

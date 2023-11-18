@@ -13,8 +13,8 @@ namespace EncryptAddition.Analysis.Benchmarking
             set
             {
                 // Since the minimum for ElGamal is 3.
-                if (value < 4)
-                    throw new ArgumentOutOfRangeException("primeBitLength", "The bit length for the comparison suite must be at least 4.");
+                if (value < 3)
+                    throw new ArgumentOutOfRangeException("primeBitLength", "The bit length for the comparison suite must be at least 3.");
 
                 _bitLength = value;
             }

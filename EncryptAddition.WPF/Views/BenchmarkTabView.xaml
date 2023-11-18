@@ -6,34 +6,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:controls="clr-namespace:EncryptAddition.WPF.Controls"
              xmlns:converters="clr-namespace:EncryptAddition.WPF.Converters"
-             xmlns:validation="clr-namespace:EncryptAddition.WPF.ViewModels.ValidationRules"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
     <!-- #region Resources -->
     <UserControl.Resources>
         <!-- Converters -->
-        <converters:StringToBigIntegerArrayConverter x:Key="StringToBigIntegerArrayConverter"/>
-        
         <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
         <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-
-        <!-- Validation Rules -->
-        <validation:BitLengthRangeRule x:Key="BitLengthRangeRule"/>
-        <validation:InputValuesRule x:Key="InputValuesRule"/>
-
-        <!-- Style rule that blocks button if validation errors have occured -->
-        <Style TargetType="Button" BasedOn="{StaticResource RunButtonStyle}">
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding ElementName=txtPrimeBitLength, Path=(Validation.HasError)}" Value="True">
-                    <Setter Property="IsEnabled" Value="False"></Setter>
-                </DataTrigger>
-
-                <DataTrigger Binding="{Binding ElementName=txtBenchmarkInputValues, Path=(Validation.HasError)}" Value="True">
-                    <Setter Property="IsEnabled" Value="False"></Setter>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
     </UserControl.Resources>
     <!-- #endregion -->
 
@@ -51,40 +31,11 @@
                 
                 <!-- Bit Length Field -->
                 <Label Content="_Bit Length:" Target="{Binding ElementName=txtPrimeBitLength}"/>
-                <TextBox Name="txtPrimeBitLength" Margin="5">
-                    <TextBox.Text>
-                        <Binding Path="BitLength" UpdateSourceTrigger="PropertyChanged" Mode="OneWayToSource">
-                            <Binding.ValidationRules>
-                                <validation:BitLengthRangeRule/>
-                            </Binding.ValidationRules>
-                        </Binding>
-                    </TextBox.Text>
-                    <TextBox.ToolTip>
-                        <ToolTip DataContext="{Binding RelativeSource={RelativeSource Self}, Path=PlacementTarget}">
-                            <TextBlock Text="{Binding (Validation.Errors).CurrentItem.ErrorContent, 
-                                  FallbackValue='No errors.', 
-                                  TargetNullValue='No errors.'}"/>
-                        </ToolTip>
-                    </TextBox.ToolTip>
-                </TextBox>
+                <TextBox Name="txtPrimeBitLength" Margin="5" Text="{Binding BenchmarkBitLength, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" Style="{StaticResource InputTextBox}"/>
 
                 <!-- Input Values Field -->
                 <Label Content="_Input Values:" Target="{Binding ElementName=txtBenchmarkInputValues}"/>
-                <TextBox Name="txtBenchmarkInputValues" Margin="5">
-                    <TextBox.Text>
-                        <Binding Path="InputValues" UpdateSourceTrigger="PropertyChanged" Mode="OneWayToSource" Converter="{StaticResource StringToBigIntegerArrayConverter}">
-                            <Binding.ValidationRules>
-                                <validation:InputValuesRule/>
-                            </Binding.ValidationRules>
-                        </Binding>
-                    </TextBox.Text>
-                    <TextBox.ToolTip>
-                        <ToolTip DataContext="{Binding RelativeSource={RelativeSource Self}, Path=PlacementTarget}">
-                            <TextBlock Text="{Binding (Validation.Errors).CurrentItem.ErrorContent, 
-                                  FallbackValue='No errors.', 
-                                  TargetNullValue='No errors.'}"/>
-                        </ToolTip>
-                    </TextBox.ToolTip>
+                <TextBox Name="txtBenchmarkInputValues" Margin="5" Text="{Binding InputValues, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" Style="{StaticResource InputTextBox}">
                 </TextBox>
 
                 <!-- Benchmark Choice Combobox-->
@@ -92,7 +43,7 @@
                 <ComboBox Name="cbAlgorithm" ItemsSource="{Binding StrategyList}" SelectedItem="{Binding BenchmarkChoice, Mode=TwoWay}" />
                 
                 <!-- Run Button -->
-                <Button Name="btnRun" Content="_Run Benchmark" Command="{Binding ExecuteBenchmark}"/>
+                <Button Name="btnRun" Content="_Run Benchmark" Command="{Binding ExecuteBenchmark}" Style="{StaticResource RunButtonStyle}"/>
             </StackPanel>
         </Border>
         <!-- #endregion -->
