@@ -6,7 +6,6 @@ namespace EncryptAddition.WPF.Models.Stores
     public sealed class EncryptServiceStore
     {
         private static EncryptServiceStore _instance;
-        public static bool IsInstantiated => _instance != null;
 
         private static string? _serializedKeyPair;
         private static int? _bitLength;
