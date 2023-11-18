@@ -15,6 +15,11 @@ namespace EncryptAddition.WPF.Converters
                 return bigInt.ToString().Length > 9 ? $"{bigInt:0.0000e+0}" : $"{bigInt}";
             }
 
+            if (BigInteger.TryParse((string)value, out BigInteger bigIntOut))
+            {
+                return bigIntOut.ToString().Length > 9 ? $"{bigIntOut:0.0000e+0}" : $"{bigIntOut}";
+            }
+
             return value;
         }
 
