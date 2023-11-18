@@ -1,5 +1,6 @@
 ﻿using EncryptAddition.Analysis.ResultTypes;
 using EncryptAddition.Crypto;
+using EncryptAddition.Crypto.Exceptions;
 using System.Numerics;
 
 namespace EncryptAddition.Analysis.Benchmarking
@@ -55,7 +56,7 @@ namespace EncryptAddition.Analysis.Benchmarking
             BigInteger sum = values.Aggregate((a, b) => a + b);
 
             if (sum > _algorithmBenchmarker.GetMaxPlaintextSize())
-                throw new ArgumentException($"The sum of the arguments provided exceeds the max plaintext size supported by the {EncryptionType} algorithm. The sum should be <= {_algorithmBenchmarker.GetMaxPlaintextSize()}.");
+                throw new EncryptionOverflowException(sum, _algorithmBenchmarker.GetMaxPlaintextSize(), $"The sum of the arguments provided exceeds the max plaintext size supported by the {EncryptionType} algorithm. The sum should be <= {_algorithmBenchmarker.GetMaxPlaintextSize()}.");
 
             // Run benchmarks for the algorithm
             double keyGenTime = _algorithmBenchmarker.TimeToGenerateKeys();

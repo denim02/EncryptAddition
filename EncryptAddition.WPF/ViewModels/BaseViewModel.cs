@@ -36,7 +36,7 @@ namespace EncryptAddition.WPF.ViewModels
             return _errors.ContainsKey(propertyName) ? _errors[propertyName] : Enumerable.Empty<string>();
         }
 
-        protected void AddError(string errorMessage, [CallerMemberName] string propertyName = null)
+        public void AddError(string errorMessage, [CallerMemberName] string propertyName = null)
         {
             if (!_errors.ContainsKey(propertyName))
                 _errors.Add(propertyName, new List<string>());
@@ -74,6 +74,14 @@ namespace EncryptAddition.WPF.ViewModels
             }
 
             return validationResult.IsValid;
+        }
+
+        public void InvalidateProperty(string errorMessage, string propertyName)
+        {
+            ClearErrors(propertyName);
+            AddError(errorMessage, propertyName);
+            GetType().GetProperty("IsValid" + propertyName)?.SetValue(this, false);
+            OnPropertyChanged("IsDataValid");
         }
         #endregion
     }

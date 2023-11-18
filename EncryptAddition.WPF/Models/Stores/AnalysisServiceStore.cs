@@ -28,5 +28,10 @@ namespace EncryptAddition.WPF.Models.Stores
 
             return _instance;
         }
+
+        public static void ClearInstance()
+        {
+            _instance = null;
+        }
     }
 }

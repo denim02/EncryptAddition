@@ -33,11 +33,11 @@ namespace EncryptAddition.Analysis.Benchmarking
 
         public (BenchmarkResult PaillierResult, BenchmarkResult ElGamalResult) RunBenchmarks(params BigInteger[] values)
         {
+            // Run benchmarks for ElGamal (first to throw exceptions usually)
+            var elGamalResults = _elGamalSuite.RunBenchmarks(values);
+
             // Run benchmarks for Paillier
             var paillierResults = _paillierSuite.RunBenchmarks(values);
-
-            // Run benchmarks for ElGamal
-            var elGamalResults = _elGamalSuite.RunBenchmarks(values);
 
             return (paillierResults, elGamalResults);
         }

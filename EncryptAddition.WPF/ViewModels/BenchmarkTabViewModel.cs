@@ -30,13 +30,13 @@ namespace EncryptAddition.WPF.ViewModels
 
         // BitLength textbox field
         private string _benchmarkBitLength;
-        private bool _isBenchmarkBitLengthValid = false;
+        public bool IsValidBenchmarkBitLength { get; set; } = false;
         public string BenchmarkBitLength
         {
             get => _benchmarkBitLength;
             set
             {
-                _isBenchmarkBitLengthValid = IsPropertyValid(value, IsBitLengthValid);
+                IsValidBenchmarkBitLength = IsPropertyValid(value, IsBitLengthValid);
 
                 _benchmarkBitLength = value;
                 OnPropertyChanged();
@@ -62,13 +62,13 @@ namespace EncryptAddition.WPF.ViewModels
 
         // InputValues textbox field
         private string _inputValues;
-        private bool _isInputValuesValid = false;
+        public bool IsValidInputValues { get; set; } = false;
         public string InputValues
         {
             get => _inputValues;
             set
             {
-                _isInputValuesValid = IsPropertyValid(value, IsInputValuesValid);
+                IsValidInputValues = IsPropertyValid(value, IsInputValuesValid);
 
                 _inputValues = value;
                 OnPropertyChanged();
@@ -90,7 +90,7 @@ namespace EncryptAddition.WPF.ViewModels
         }
 
         // Used to block the run button if the inputs are invaid
-        public bool IsDataValid => _isInputValuesValid && _isBenchmarkBitLengthValid;
+        public bool IsDataValid => IsValidInputValues && IsValidBenchmarkBitLength;
         #endregion
 
         #region Output Fields

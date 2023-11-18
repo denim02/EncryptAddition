@@ -1,7 +1,7 @@
-﻿using EncryptAddition.WPF.Models.ServiceAdapters;
+﻿using EncryptAddition.Crypto.Exceptions;
+using EncryptAddition.WPF.Models.ServiceAdapters;
 using EncryptAddition.WPF.Models.Stores;
 using EncryptAddition.WPF.ViewModels;
-using System;
 using System.Threading.Tasks;
 
 namespace EncryptAddition.WPF.Commands
@@ -37,12 +37,28 @@ namespace EncryptAddition.WPF.Commands
                     _encryptionAdapter.Encrypt(Utils.ParseStringToBigIntegerArray(_encryptTabViewModel.EncryptionInputValues)) :
                     _encryptionAdapter.Decrypt(Utils.ParseStringToCipherTextArray(_encryptTabViewModel.DecryptionInputValues)));
 
-                _encryptTabViewModel.IsRunningOperation = false;
                 _encryptTabViewModel.Result = results;
             }
-            catch (Exception)
+            catch (InvalidKeyPairException ex)
             {
-                throw;
+                EncryptServiceStore.ClearInstance();
+                Utils.HandleBenchmarkException(ex);
+                _encryptTabViewModel.InvalidateProperty("Invalid key pair.", nameof(_encryptTabViewModel.SerializedCustomKey));
+            }
+            catch (EncryptionOverflowException ex)
+            {
+                Utils.HandleBenchmarkException(ex);
+                _encryptTabViewModel.InvalidateProperty($"Invalid input values. Each input must be less than {ex.MaxPlaintextSize}.", nameof(_encryptTabViewModel.EncryptionInputValues));
+            }
+            catch (InvalidDecryptionException ex)
+            {
+                Utils.HandleBenchmarkException(ex);
+                _encryptTabViewModel.InvalidateProperty("Invalid ciphertext values.", nameof(_encryptTabViewModel.DecryptionInputValues));
+            }
+            finally
+            {
+                _encryptTabViewModel.IsPreparingService = false;
+                _encryptTabViewModel.IsRunningOperation = false;
             }
         }
     }
