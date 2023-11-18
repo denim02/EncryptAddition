@@ -30,7 +30,7 @@ namespace EncryptAddition.WPF.Commands
                 _benchmarkTabViewModel.IsPreparingBenchmark = false;
                 _benchmarkTabViewModel.IsBenchmarking = true;
 
-                var results = await analysisAdapter.RunAnalysis(Utils.ParseStringToBigInteger(_benchmarkTabViewModel.InputValues));
+                var results = await analysisAdapter.RunAnalysis(Utils.ParseStringToBigIntegerArray(_benchmarkTabViewModel.InputValues));
 
                 _benchmarkTabViewModel.IsBenchmarking = false;
                 _benchmarkTabViewModel.BenchmarkResults = results;

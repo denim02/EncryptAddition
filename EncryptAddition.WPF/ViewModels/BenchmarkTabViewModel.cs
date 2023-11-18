@@ -76,7 +76,7 @@ namespace EncryptAddition.WPF.ViewModels
             }
         }
         // InputValues validation logic
-        private Regex _inputValueFormat = new Regex("^\\s*\\d+(\\s*,\\s*\\d+\\s*)*$");
+        private readonly Regex _inputValueFormat = new Regex("^\\s*\\d+(\\s*,\\s*\\d+\\s*)*$");
         private (bool IsValid, IEnumerable<string> ErrorMessages) IsInputValuesValid(string value)
         {
             // Check if the field is empty
@@ -88,12 +88,12 @@ namespace EncryptAddition.WPF.ViewModels
             else
                 return (false, new[] { "Invalid format. The input values must be entered as a comma-separated list of positive integers." });
         }
+
+        // Used to block the run button if the inputs are invaid
+        public bool IsDataValid => _isInputValuesValid && _isBenchmarkBitLengthValid;
         #endregion
 
-
         #region Output Fields
-        public bool IsDataValid => _isInputValuesValid && _isBenchmarkBitLengthValid;
-
         private Tuple<BenchmarkResult, BenchmarkResult?>? _benchmarkResults = null;
         public Tuple<BenchmarkResult, BenchmarkResult?>? BenchmarkResults
         {

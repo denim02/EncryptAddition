@@ -61,24 +61,24 @@
         <!-- Max Plaintext Size Name -->
         <StackPanel Grid.Row="4" Orientation="Horizontal">
             <TextBlock Grid.Column="0" Text="Maximum Plaintext Size:" Style="{StaticResource ResultTextBlockStyle}"/>
-            <TextBox Background="Transparent" Style="{StaticResource ResultTextBoxStyle}" BorderThickness="0" Grid.Column="1" Text="{Binding MaxPlaintextSize, Mode=OneWay,Converter={StaticResource BigIntToScientificNotationConverter}}" IsReadOnly="True" TextWrapping="Wrap"/>
+            <TextBox Background="Transparent" Style="{StaticResource ResultTextBoxStyle}" BorderThickness="0" Grid.Column="1" Text="{Binding MaxPlaintextSize,Converter={StaticResource BigIntToScientificNotationConverter}}" IsReadOnly="True" TextWrapping="Wrap"/>
         </StackPanel>
         <Border Grid.ColumnSpan="2" Grid.Row="5" Style="{StaticResource ResultBorderStyle}" />
 
         <!-- KeyPair used -->
         <StackPanel Grid.Row="6" Orientation="Horizontal">
             <TextBlock Grid.Column="0" Style="{StaticResource ResultTextBlockStyle}" Text="Serialized Key Pair:" />
-            <TextBox Background="Transparent" Style="{StaticResource ResultTextBoxStyle}" BorderThickness="0" Grid.Column="1" Text="{Binding SerializedKeyPair, Mode=OneWay}" IsReadOnly="True" TextWrapping="Wrap"/>
+            <TextBox MaxWidth="530" Background="Transparent" Style="{StaticResource ResultTextBoxStyle}" BorderThickness="0" Grid.Column="1" Text="{Binding SerializedKeyPair, Mode=OneWay}" IsReadOnly="True" TextWrapping="Wrap"/>
         </StackPanel>
         <Border Grid.ColumnSpan="2" Grid.Row="7" Style="{StaticResource ResultBorderStyle}" />
 
         <!-- #region Results -->
         <StackPanel Grid.Row="8">
             <TextBlock Grid.Column="0" Style="{StaticResource ResultTextBlockStyle}" Text="Operation Results:" />
-            <Grid Grid.IsSharedSizeScope="True">
+            <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" SharedSizeGroup="A"/>
-                    <ColumnDefinition Width="*" SharedSizeGroup="A"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Orientation="Vertical">
@@ -95,7 +95,7 @@
                                 <StackPanel Orientation="Vertical">
                                     <StackPanel Orientation="Horizontal">
                                         <TextBox Background="Transparent" Style="{StaticResource ResultTextBoxStyle}" BorderThickness="0" Grid.Column="0" Text="{Binding Item1, Mode=OneWay}" IsReadOnly="True" TextWrapping="Wrap"/>
-                                        <TextBox Background="Transparent" Style="{StaticResource ResultTextBoxStyle}" BorderThickness="0" Grid.Column="0" Text="{Binding Item2, Mode=OneWay}" IsReadOnly="True" TextWrapping="Wrap"/>
+                                        <TextBox MaxWidth="630" Background="Transparent" Style="{StaticResource ResultTextBoxStyle}" BorderThickness="0" Grid.Column="0" Text="{Binding Item2, Mode=OneWay}" IsReadOnly="True" TextWrapping="Wrap"/>
                                     </StackPanel>
                                     <Border Grid.ColumnSpan="2" Style="{StaticResource ResultBorderStyle}"/>
                                 </StackPanel>
@@ -110,7 +110,7 @@
                             <DataTemplate>
                                 <StackPanel Orientation="Vertical">
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBox Background="Transparent" Style="{StaticResource ResultTextBoxStyle}" BorderThickness="0" Grid.Column="0" Text="{Binding Item1, Mode=OneWay}" IsReadOnly="True" TextWrapping="Wrap" />
+                                        <TextBox MaxWidth="630" Background="Transparent" Style="{StaticResource ResultTextBoxStyle}" BorderThickness="0" Grid.Column="0" Text="{Binding Item1, Mode=OneWay}" IsReadOnly="True" TextWrapping="Wrap" />
                                         <TextBox Background="Transparent" Style="{StaticResource ResultTextBoxStyle}" BorderThickness="0" Grid.Column="0" Text="{Binding Item2, Mode=OneWay}" IsReadOnly="True" TextWrapping="Wrap" />
                                     </StackPanel>
                                     <Border Grid.ColumnSpan="2" Style="{StaticResource ResultBorderStyle}"/>
