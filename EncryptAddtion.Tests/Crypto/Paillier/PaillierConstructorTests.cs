@@ -1,4 +1,5 @@
-﻿using EncryptAddition.Crypto.Paillier;
+﻿using EncryptAddition.Crypto.Exceptions;
+using EncryptAddition.Crypto.Paillier;
 
 namespace EncryptAddtion.Tests.Crypto.Paillier
 {
@@ -30,7 +31,7 @@ namespace EncryptAddtion.Tests.Crypto.Paillier
             string serializedKeys = "100|200;300|400";
             var keys = new KeyPair(serializedKeys);
 
-            Assert.ThrowsException<ArgumentException>(() => new PaillierEncryption(keys));
+            Assert.ThrowsException<InvalidKeyPairException>(() => new PaillierEncryption(keys));
         }
 
         [TestMethod]

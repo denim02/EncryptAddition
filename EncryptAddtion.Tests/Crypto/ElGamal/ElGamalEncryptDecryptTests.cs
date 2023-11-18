@@ -1,4 +1,5 @@
 ﻿using EncryptAddition.Crypto.ElGamal;
+using EncryptAddition.Crypto.Exceptions;
 using EncryptAddition.Crypto.Utils;
 
 namespace EncryptAddtion.Tests.Crypto.ElGamal
@@ -44,7 +45,7 @@ namespace EncryptAddtion.Tests.Crypto.ElGamal
         {
             var elGamal = new ElGamalEncryption(3);
             BigInteger input = 8;
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() => elGamal.Encrypt(input));
+            Assert.ThrowsException<EncryptionOverflowException>(() => elGamal.Encrypt(input));
         }
 
         [TestMethod]
@@ -52,7 +53,7 @@ namespace EncryptAddtion.Tests.Crypto.ElGamal
         {
             var elGamal = new ElGamalEncryption(3);
             BigInteger input = -1;
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() => elGamal.Encrypt(input));
+            Assert.ThrowsException<EncryptionOverflowException>(() => elGamal.Encrypt(input));
         }
 
         [TestMethod]
@@ -60,7 +61,7 @@ namespace EncryptAddtion.Tests.Crypto.ElGamal
         {
             var elGamal = new ElGamalEncryption(5);
             BigInteger input = elGamal.KeyPair.PublicKey.Prime;
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() => elGamal.Encrypt(input));
+            Assert.ThrowsException<EncryptionOverflowException>(() => elGamal.Encrypt(input));
         }
 
         [TestMethod]
@@ -79,7 +80,18 @@ namespace EncryptAddtion.Tests.Crypto.ElGamal
             // Define an invalid cipher for ElGamal (one with no shared secret)
             var cipher = new CipherText(100);
 
-            Assert.ThrowsException<ArgumentException>(() => elGamal.Decrypt(cipher));
+            Assert.ThrowsException<InvalidDecryptionException>(() => elGamal.Decrypt(cipher));
+        }
+
+        [TestMethod]
+        public void ElGamalEncryptDecrypt_Decrypt_InternalMathException()
+        {
+            KeyPair keys = new("23|5|8;6");
+            var elGamal = new ElGamalEncryption(keys);
+            // Define an invalid cipher for ElGamal (one with no shared secret)
+            var cipher = new CipherText(3, 46);
+
+            Assert.ThrowsException<InvalidDecryptionException>(() => elGamal.Decrypt(cipher));
         }
         #endregion
 

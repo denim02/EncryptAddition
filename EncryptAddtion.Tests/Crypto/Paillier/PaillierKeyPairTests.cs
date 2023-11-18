@@ -108,5 +108,15 @@ namespace EncryptAddtion.Tests.Crypto.Paillier
 
             Assert.AreEqual(keyPair.Serialize(), serializedKeys);
         }
+
+        [TestMethod]
+        public void KeyPair_ValidateSerializedKeys()
+        {
+            string serializedKeyCorrect = "123|123;123|123";
+            string serializedKeyInvalid = "123|123|123;123";
+
+            Assert.IsFalse(KeyPair.ValidateSerializedKeys(serializedKeyInvalid));
+            Assert.IsTrue(KeyPair.ValidateSerializedKeys(serializedKeyCorrect));
+        }
     }
 }

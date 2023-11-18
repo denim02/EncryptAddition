@@ -1,3 +1,4 @@
+using EncryptAddition.Crypto.Exceptions;
 using EncryptAddition.Crypto.Utils;
 using System.Numerics;
 
@@ -31,7 +32,7 @@ namespace EncryptAddition.Crypto.ElGamal
         public ElGamalEncryption(int primeBitLength)
         {
             SetPrimeBitLength(primeBitLength);
-            RegenerateKeys();
+            GenerateKeys();
         }
 
         /// <summary>
@@ -40,15 +41,23 @@ namespace EncryptAddition.Crypto.ElGamal
         /// if the key pair is not valid.
         /// </summary>
         /// <param name="keyPair">An ElGamal key pair.</param>
+        /// <exception cref="InvalidKeyPairExceptionTests">Thrown if the provided key pair is invalid or incompatible with ElGamal.</exception>
         public ElGamalEncryption(KeyPair keyPair)
         {
-            ValidateAndSetKeyPair(keyPair);
-            SetPrimeBitLength((int)KeyPair!.PublicKey.Prime.GetBitLength());
+            try
+            {
+                ValidateAndSetKeyPair(keyPair);
+                SetPrimeBitLength((int)KeyPair!.PublicKey.Prime.GetBitLength());
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidKeyPairException(keyPair.Serialize(), ex.Message, ex);
+            }
         }
 
         /// <summary>
         /// Changes the set bit length for the prime modulus.
-        /// Must call RegenerateKeys() to refresh the keys with 
+        /// Must call GenerateKeys() to refresh the keys with 
         /// the new bit length.
         /// </summary>
         /// <param name="primeBitLength">The new desired bit length.</param>
@@ -98,16 +107,12 @@ namespace EncryptAddition.Crypto.ElGamal
 
             KeyPair = keyPair;
         }
-        private void SetKeyPair(KeyPair keyPair)
-        {
-            KeyPair = keyPair;
-        }
 
         /// <summary>
         /// Refreshes the keys used by the algorithm by re-creating them using
         /// the set bit length.
         /// </summary>
-        public void RegenerateKeys()
+        public void GenerateKeys()
         {
             BigInteger prime = Primality.GenerateSafePrime(PrimeBitLength);
             BigInteger generator = CyclicMath.FindGeneratorForSafePrime(prime);
@@ -117,7 +122,7 @@ namespace EncryptAddition.Crypto.ElGamal
 
             var publicKey = new PublicKey(prime, generator, beta);
 
-            SetKeyPair(new KeyPair(publicKey, privateKey));
+            KeyPair = new KeyPair(publicKey, privateKey);
         }
 
         /// <summary>
@@ -125,11 +130,11 @@ namespace EncryptAddition.Crypto.ElGamal
         /// </summary>
         /// <param name="input">A BigInteger plaintext.</param>
         /// <returns>The corresponding ciphertext.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if the plaintext is too large to be encrypted.</exception>
+        /// <exception cref="EncryptionOverflowException">Thrown if the plaintext is too large to be encrypted.</exception>
         public CipherText Encrypt(BigInteger input)
         {
             if (input < 0 || input > MaxPlaintextSize)
-                throw new ArgumentOutOfRangeException(nameof(input), $"The input must be within the range [0, {MaxPlaintextSize}].");
+                throw new EncryptionOverflowException(input, MaxPlaintextSize, $"The input must be within the range [0, {MaxPlaintextSize}].");
 
             BigInteger k = Helpers.GetBigInteger(2, KeyPair.PublicKey.Prime - 2);
             BigInteger sharedSecret = BigInteger.ModPow(KeyPair.PublicKey.Generator, k, KeyPair.PublicKey.Prime);
@@ -149,26 +154,33 @@ namespace EncryptAddition.Crypto.ElGamal
         /// </summary>
         /// <param name="cipher">An ElGamal cipher.</param>
         /// <returns>The corresponding plaintext.</returns>
-        /// <exception cref="ArgumentException">Thrown if a Paillier ciphertext is passed in.</exception>
+        /// <exception cref="InvalidDecryptionException">Thrown if an invalid cipher text is passed in or if the decryption is unsuccessful.</exception>
         public BigInteger Decrypt(CipherText cipher)
         {
             if (!cipher.SharedSecret.HasValue)
-                throw new ArgumentException("Invalid cipher text entered. ElGamal requires the cipher to contain a shared secret.");
+                throw new InvalidDecryptionException(cipher, "Invalid cipher text entered. ElGamal requires the cipher to contain a shared secret.");
 
-            BigInteger val = Helpers.ModMul(
-                cipher.EncryptedMessage,
-                CyclicMath.PrimeModInverse(
-                    BigInteger.ModPow(
-                        cipher.SharedSecret.Value,
-                        KeyPair.PrivateKey,
+            try
+            {
+                BigInteger val = Helpers.ModMul(
+                    cipher.EncryptedMessage,
+                    CyclicMath.PrimeModInverse(
+                        BigInteger.ModPow(
+                            cipher.SharedSecret.Value,
+                            KeyPair.PrivateKey,
+                            KeyPair.PublicKey.Prime
+                        ),
                         KeyPair.PublicKey.Prime
                     ),
                     KeyPair.PublicKey.Prime
-                ),
-                KeyPair.PublicKey.Prime
-            );
+                );
 
-            return CyclicMath.DiscreteLog(KeyPair.PublicKey.Generator, val, KeyPair.PublicKey.Prime - 1);
+                return CyclicMath.DiscreteLog(KeyPair.PublicKey.Generator, val, KeyPair.PublicKey.Prime - 1);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidDecryptionException(cipher, ex.Message, ex);
+            }
         }
 
         /// <summary>

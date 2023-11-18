@@ -20,7 +20,7 @@ namespace EncryptAddition.Crypto
 
         void SetPrimeBitLength(int primeBitLength);
 
-        void RegenerateKeys();
+        void GenerateKeys();
 
         string PrintKeys();
     }

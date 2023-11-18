@@ -1,4 +1,5 @@
 ﻿using EncryptAddition.Crypto.ElGamal;
+using EncryptAddition.Crypto.Exceptions;
 
 namespace EncryptAddtion.Tests.Crypto.ElGamal
 {
@@ -47,7 +48,7 @@ namespace EncryptAddtion.Tests.Crypto.ElGamal
             {
                 var elGamal = new ElGamalEncryption(keyPair);
             }
-            catch (ArgumentException e)
+            catch (InvalidKeyPairException e)
             {
                 Assert.AreEqual(e.Message, "Invalid public key. The generator is greater than the prime.");
             }
@@ -62,31 +63,35 @@ namespace EncryptAddtion.Tests.Crypto.ElGamal
             {
                 var elGamal = new ElGamalEncryption(keyPair);
             }
-            catch (ArgumentException e)
+            catch (InvalidKeyPairException e)
             {
                 Assert.AreEqual(e.Message, "Invalid public key. Beta is greater than the prime.");
             }
         }
 
         [TestMethod]
-        public void ElGamal_SetKeyPairWithValidationWithInvalidFormat_PrivateKeyOutsideRange()
+        public void ElGamal_SetKeyPairWithValidationWithInvalidFormat_PrivateKeyOutsideRangeTooSmall()
         {
             var keyPair = KeyPair.Deserialize("5|2|4;1");
             try
             {
                 var elGamal = new ElGamalEncryption(keyPair);
             }
-            catch (ArgumentException e)
+            catch (InvalidKeyPairException e)
             {
                 Assert.AreEqual(e.Message, "Invalid private key");
             }
+        }
 
-            var keyPair2 = KeyPair.Deserialize("5|2|4;7");
+        [TestMethod]
+        public void ElGamal_SetKeyPairWithValidationWithInvalidFormat_PrivateKeyOutsideRangeTooLarge()
+        {
+            var keyPair = KeyPair.Deserialize("5|2|4;7");
             try
             {
                 var elGamal2 = new ElGamalEncryption(keyPair);
             }
-            catch (ArgumentException e2)
+            catch (InvalidKeyPairException e2)
             {
                 Assert.AreEqual(e2.Message, "Invalid private key");
             }
@@ -100,7 +105,7 @@ namespace EncryptAddtion.Tests.Crypto.ElGamal
             {
                 var elGamal = new ElGamalEncryption(keyPair);
             }
-            catch (ArgumentException e)
+            catch (InvalidKeyPairException e)
             {
                 Assert.AreEqual(e.Message, "Invalid public key. The order of the group is not prime.");
             }
@@ -114,7 +119,7 @@ namespace EncryptAddtion.Tests.Crypto.ElGamal
             {
                 var elGamal = new ElGamalEncryption(keyPair);
             }
-            catch (ArgumentException e)
+            catch (InvalidKeyPairException e)
             {
                 Assert.AreEqual(e.Message, "Invalid public key. The prime is not a safe prime.");
             }
@@ -128,7 +133,7 @@ namespace EncryptAddtion.Tests.Crypto.ElGamal
             {
                 var elGamal = new ElGamalEncryption(keyPair);
             }
-            catch (ArgumentException e)
+            catch (InvalidKeyPairException e)
             {
                 Assert.AreEqual(e.Message, "Invalid public key. The provided value is not a generator for the group defined by the prime.");
             }
@@ -142,7 +147,7 @@ namespace EncryptAddtion.Tests.Crypto.ElGamal
             {
                 var elGamal = new ElGamalEncryption(keyPair);
             }
-            catch (ArgumentException e)
+            catch (InvalidKeyPairException e)
             {
                 Assert.AreEqual(e.Message, "Invalid public key. The provided beta is not correct.");
             }

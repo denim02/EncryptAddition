@@ -41,15 +41,17 @@ namespace EncryptAddtion.Tests.Crypto.Utils
             Assert.AreEqual(CyclicMath.DiscreteLog(generator, power, order), new BigInteger(2));
         }
 
+        [TestMethod]
         public void DiscreteLog_Modulo13()
         {
             BigInteger generator = 7;
-            BigInteger power = 16807; // 7^11 mod 13
+            BigInteger power = 2; // 7^11 mod 13
             BigInteger order = 13 - 1;
 
             Assert.AreEqual(CyclicMath.DiscreteLog(generator, power, order), new BigInteger(11));
         }
 
+        [TestMethod]
         public void DiscreteLog_Modulo29()
         {
             BigInteger generator = 26;

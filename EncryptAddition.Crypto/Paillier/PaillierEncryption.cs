@@ -1,4 +1,5 @@
-﻿using EncryptAddition.Crypto.Utils;
+﻿using EncryptAddition.Crypto.Exceptions;
+using EncryptAddition.Crypto.Utils;
 using System.Numerics;
 
 namespace EncryptAddition.Crypto.Paillier
@@ -33,7 +34,7 @@ namespace EncryptAddition.Crypto.Paillier
         public PaillierEncryption(int primeBitLength)
         {
             SetPrimeBitLength(primeBitLength);
-            RegenerateKeys();
+            GenerateKeys();
         }
 
         /// <summary>
@@ -42,14 +43,22 @@ namespace EncryptAddition.Crypto.Paillier
         /// if the key pair is not valid.
         /// </summary>
         /// <param name="keyPair">A Paillier key pair.</param>
+        /// <exception cref="InvalidKeyPairExceptionTests">Thrown if the provided key pair is invalid or incompatible with Paillier.</exception>
         public PaillierEncryption(KeyPair keyPair)
         {
-            ValidateAndSetKeyPair(keyPair);
+            try
+            {
+                ValidateAndSetKeyPair(keyPair);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidKeyPairException(keyPair.Serialize(), ex.Message, ex);
+            }
         }
 
         /// <summary>
         /// Changes the set bit length for the prime modulus.
-        /// Must call RegenerateKeys() to refresh the keys with 
+        /// Must call GenerateKeys() to refresh the keys with 
         /// the new bit length.
         /// </summary>
         /// <param name="primeBitLength">The new desired bit length.</param>
@@ -80,16 +89,11 @@ namespace EncryptAddition.Crypto.Paillier
             KeyPair = keyPair;
         }
 
-        private void SetKeyPair(KeyPair keyPair)
-        {
-            KeyPair = keyPair;
-        }
-
         /// <summary>
         /// Refreshes the keys used by the algorithm by re-creating them using
         /// the set bit length.
         /// </summary>
-        public void RegenerateKeys()
+        public void GenerateKeys()
         {
             if (!PrimeBitLength.HasValue)
                 throw new InvalidOperationException("Cannot re-generate the keys without first setting the desired prime bit length.");
@@ -106,7 +110,7 @@ namespace EncryptAddition.Crypto.Paillier
 
             PublicKey publicKey = new(n, g);
             PrivateKey privateKey = new(lambda, mu);
-            SetKeyPair(new KeyPair(publicKey, privateKey));
+            KeyPair = new KeyPair(publicKey, privateKey);
         }
 
         /// <summary>
@@ -114,12 +118,12 @@ namespace EncryptAddition.Crypto.Paillier
         /// </summary>
         /// <param name="input">A BigInteger plaintext.</param>
         /// <returns>The corresponding ciphertext.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if the plaintext is too large to be encrypted.</exception>
+        /// <exception cref="EncryptionOverflowException">Thrown if the plaintext is too large to be encrypted.</exception>
         public CipherText Encrypt(BigInteger input)
         {
             // Check if the input is within the range of the public key
             if (input < 0 || input > MaxPlaintextSize)
-                throw new ArgumentOutOfRangeException(nameof(input), $"The input must be within the range [0, {MaxPlaintextSize}].");
+                throw new EncryptionOverflowException(input, MaxPlaintextSize, $"The input must be within the range [0, {MaxPlaintextSize}].");
 
             BigInteger randomVal;
 
@@ -136,8 +140,11 @@ namespace EncryptAddition.Crypto.Paillier
         /// </summary>
         /// <param name="cipher">A Paillier cipher.</param>
         /// <returns>The corresponding plaintext.</returns>
+        /// <exception cref="InvalidDecryptionException">Thrown if an invalid cipher text is passed to the function.</exception>
         public BigInteger Decrypt(CipherText cipher)
         {
+            if (cipher.SharedSecret.HasValue)
+                throw new InvalidDecryptionException(cipher, "Invalid cipher passed in. Paillier does not use a shared secret.");
 
             BigInteger power = BigInteger.ModPow(cipher.EncryptedMessage, KeyPair.PrivateKey.Lambda, NSquared);
             BigInteger ratio = (power - 1) / KeyPair.PublicKey.N;

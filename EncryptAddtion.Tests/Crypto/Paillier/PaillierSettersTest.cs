@@ -1,4 +1,5 @@
-﻿using EncryptAddition.Crypto.Paillier;
+﻿using EncryptAddition.Crypto.Exceptions;
+using EncryptAddition.Crypto.Paillier;
 
 namespace EncryptAddtion.Tests.Crypto.Paillier
 {
@@ -47,7 +48,7 @@ namespace EncryptAddtion.Tests.Crypto.Paillier
             {
                 var paillier = new PaillierEncryption(keyPair);
             }
-            catch (ArgumentException e)
+            catch (InvalidKeyPairException e)
             {
                 Assert.AreEqual(e.Message, "Invalid public key. G is not equal to n + 1.");
             }
@@ -62,7 +63,7 @@ namespace EncryptAddtion.Tests.Crypto.Paillier
             {
                 var paillier = new PaillierEncryption(keyPair);
             }
-            catch (ArgumentException e)
+            catch (InvalidKeyPairException e)
             {
                 Assert.AreEqual(e.Message, "Invalid private key.");
             }

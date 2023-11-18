@@ -3,27 +3,27 @@
 namespace EncryptAddtion.Tests.Crypto.Paillier
 {
     [TestClass]
-    public class PaillierRegenerateKeysTests
+    public class PaillierGenerateKeysTests
     {
         [TestMethod]
-        public void PaillierRegenerateKeys_WithoutPrimeBitLength()
+        public void PaillierGenerateKeys_WithoutPrimeBitLength()
         {
             var keyPair = KeyPair.Deserialize("6|7;2|2");
             var paillier = new PaillierEncryption(keyPair);
 
             Assert.IsNull(paillier.PrimeBitLength);
-            Assert.ThrowsException<InvalidOperationException>(() => paillier.RegenerateKeys());
+            Assert.ThrowsException<InvalidOperationException>(() => paillier.GenerateKeys());
         }
 
         [TestMethod]
-        public void PaillierRegenerateKeys_WithCorrectBitLength()
+        public void PaillierGenerateKeys_WithCorrectBitLength()
         {
             int bitLength = 3;
             var paillier = new PaillierEncryption(bitLength);
             var serializedKeys = paillier.PrintKeys();
 
             paillier.SetPrimeBitLength(4);
-            paillier.RegenerateKeys();
+            paillier.GenerateKeys();
 
             Assert.AreEqual(paillier.PrimeBitLength, 4);
             Assert.AreEqual(paillier.MaxPlaintextSize, paillier.KeyPair.PublicKey.N - 2);

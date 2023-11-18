@@ -1,4 +1,5 @@
 ﻿using EncryptAddition.Crypto.ElGamal;
+using EncryptAddition.Crypto.Exceptions;
 
 namespace EncryptAddtion.Tests.Crypto.ElGamal
 {
@@ -31,7 +32,7 @@ namespace EncryptAddtion.Tests.Crypto.ElGamal
             string serializedKeys = "100|200|300;400";
             var keys = new KeyPair(serializedKeys);
 
-            Assert.ThrowsException<ArgumentException>(() => new ElGamalEncryption(keys));
+            Assert.ThrowsException<InvalidKeyPairException>(() => new ElGamalEncryption(keys));
         }
 
         [TestMethod]

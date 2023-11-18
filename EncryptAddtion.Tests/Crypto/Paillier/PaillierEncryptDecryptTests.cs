@@ -1,4 +1,5 @@
-﻿using EncryptAddition.Crypto.Paillier;
+﻿using EncryptAddition.Crypto.Exceptions;
+using EncryptAddition.Crypto.Paillier;
 using EncryptAddition.Crypto.Utils;
 
 namespace EncryptAddtion.Tests.Crypto.Paillier
@@ -44,7 +45,7 @@ namespace EncryptAddtion.Tests.Crypto.Paillier
         {
             var paillier = new PaillierEncryption(3);
             BigInteger input = paillier.MaxPlaintextSize + 1;
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() => paillier.Encrypt(input));
+            Assert.ThrowsException<EncryptionOverflowException>(() => paillier.Encrypt(input));
         }
 
         [TestMethod]
@@ -52,7 +53,7 @@ namespace EncryptAddtion.Tests.Crypto.Paillier
         {
             var paillier = new PaillierEncryption(3);
             BigInteger input = -1;
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() => paillier.Encrypt(input));
+            Assert.ThrowsException<EncryptionOverflowException>(() => paillier.Encrypt(input));
         }
 
         [TestMethod]
@@ -60,7 +61,7 @@ namespace EncryptAddtion.Tests.Crypto.Paillier
         {
             var paillier = new PaillierEncryption(5);
             BigInteger input = paillier.KeyPair.PublicKey.N;
-            Assert.ThrowsException<ArgumentOutOfRangeException>(() => paillier.Encrypt(input));
+            Assert.ThrowsException<EncryptionOverflowException>(() => paillier.Encrypt(input));
         }
 
         [TestMethod]
@@ -70,6 +71,14 @@ namespace EncryptAddtion.Tests.Crypto.Paillier
             BigInteger input = paillier.KeyPair.PublicKey.N - 2;
             Assert.AreEqual(input, paillier.MaxPlaintextSize);
             Assert.AreEqual(input, paillier.Decrypt(paillier.Encrypt(input)));
+        }
+
+        [TestMethod]
+        public void PaillierEncryptDecrypt_Decrypt_InvalidCipherText()
+        {
+            var paillier = new PaillierEncryption(5);
+            var cipher = new CipherText(BigInteger.One, BigInteger.One);
+            Assert.ThrowsException<InvalidDecryptionException>(() => paillier.Decrypt(cipher));
         }
         #endregion
 
