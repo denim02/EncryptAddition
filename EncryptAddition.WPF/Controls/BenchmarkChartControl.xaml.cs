@@ -83,9 +83,9 @@ namespace EncryptAddition.WPF.Controls
                 new string[] { "Key Generation Time", "Encryption Time", "Decryption Time", "Addition Time" } :
                 new string[] { "Key Generation Time", "Encryption Time", "Decryption Time" };
 
-            Func<double, string> labelFormatter = value => value.ToString("G5");
+            Func<double, string> labelFormatter = value => value.ToString("0.####");
 
-            this.CartesianChart.AxisX[0].LabelFormatter = labelFormatter;
+            this.CartesianChart.AxisY[0].LabelFormatter = labelFormatter;
             this.CartesianChart.Series = chartSeries;
             this.XAxis.Labels = labels;
         }
