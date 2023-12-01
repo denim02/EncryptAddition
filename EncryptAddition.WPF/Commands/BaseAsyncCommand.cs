@@ -4,6 +4,7 @@ using System.Windows.Input;
 
 public abstract class BaseAsyncCommand : ICommand
 {
+    // Used to track execution status to block button
     private bool _isExecuting;
     public bool IsExecuting
     {
@@ -25,6 +26,7 @@ public abstract class BaseAsyncCommand : ICommand
         return !IsExecuting;
     }
 
+    // Will be called when the command is executed
     public async void Execute(object parameter)
     {
         IsExecuting = true;
@@ -33,6 +35,7 @@ public abstract class BaseAsyncCommand : ICommand
         IsExecuting = false;
     }
 
+    // Underlying method to be implemented by inheriting classes
     public abstract Task ExecuteAsync(object parameter);
 
     protected void OnCallExecuteChanged()

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Windows;
 using System.Windows.Input;
 
 namespace EncryptAddition.WPF.ViewModels
@@ -30,6 +31,7 @@ namespace EncryptAddition.WPF.ViewModels
 
         // BitLength textbox field
         private string _benchmarkBitLength;
+        private bool _wasWarned = false;
         public bool IsValidBenchmarkBitLength { get; set; } = false;
         public string BenchmarkBitLength
         {
@@ -37,6 +39,12 @@ namespace EncryptAddition.WPF.ViewModels
             set
             {
                 IsValidBenchmarkBitLength = IsPropertyValid(value, IsBitLengthValid);
+
+                if (int.TryParse(value, out int result) && result > 256 && !_wasWarned)
+                {
+                    MessageBox.Show($"The chosen bit length might produce significant delays in generating results. Values under 256 bits are recommended.", "Bit Length Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    _wasWarned = true;
+                }
 
                 _benchmarkBitLength = value;
                 OnPropertyChanged();
